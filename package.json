@@ -1,0 +1,20 @@
+{
+  "name": "hmmsx",
+  "description": "Experimental DOM JSX library",
+  "license": "MIT",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "yarn clean && yarn build-dist",
+    "clean": "rm -f *.d.ts *.js *.map spring/* react/* preact/* jest/*",
+    "build-dist": "tsc --outDir ./"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "@most/core": "^1.5.0",
+    "@most/scheduler": "^1.2.3",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "rxjs": "^7.0.0-alpha.0"
+  }
+}

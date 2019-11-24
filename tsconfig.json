@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "docs",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "es6",
+    "lib": ["es6", "dom"],
+    "jsx": "react",
+    "jsxFactory": "createHmmNode",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "stripInternal": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["rxjs"]
+  },
+  "typeAcquisition": {
+    "enable": false,
+    "exclude": ["react"]
+  },
+  "files": [
+    "src/rxjs.d.ts",
+    "src/jsx.d.ts",
+    "src/createHmmNode.ts",
+    "src/index.ts",
+    "src/test.tsx"
+  ]
+}
