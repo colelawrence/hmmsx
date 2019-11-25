@@ -75,6 +75,7 @@ declare namespace Hmm {
 
   type JSXElementConstructor<P> =
     | ((props: P) => HmmElement | null)
+    | rxjs.Observable<any>
     | (new (props: P) => Component<P, any>);
 
   type Key = string | number;
@@ -117,8 +118,18 @@ declare namespace Hmm {
         from: rxjs.Observable<P>,
         next: (value: P) => Partial<E>
       ) => void
-    ): void
+    ): void;
   }
+
+  interface CreateRxStyle {
+    (
+      from: <P>(
+        from: rxjs.Observable<P>,
+        next: (value: P) => CSSProperties
+      ) => void
+    ): void;
+  }
+
   interface CreateRxChildren<E> {
     (
       child: <P>(
@@ -129,20 +140,22 @@ declare namespace Hmm {
         from: rxjs.Observable<rxjs.Observable<P>[]>,
         nextChild: (value: P) => Hmm.Node
       ) => void
-    ): void
+    ): void;
   }
   interface ClassAttributes<T, E = unknown> extends Attributes {
     // $?: Builders<E>;
     $attrs?: CreateRxAttrs<E>;
+    $style?: CreateRxStyle;
     $children?: CreateRxChildren<E>;
     // ref?: Ref<T>;
   }
 
   interface HmmElement<
     P = any,
-    T extends string | JSXElementConstructor<any> =
+    T extends string | JSXElementConstructor<any> | rxjs.Observable<any> =
       | string
       | JSXElementConstructor<any>
+      | rxjs.Observable<any>
   > extends Node {
     type: T;
     props: P;
@@ -150,7 +163,10 @@ declare namespace Hmm {
   }
 
   interface HmmComponentElement<
-    T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
+    T extends
+      | keyof JSX.IntrinsicElements
+      | JSXElementConstructor<any>
+      | rxjs.Observable<any>,
     P = Pick<ComponentProps<T>, Exclude<keyof ComponentProps<T>, "key" | "ref">>
   > extends HmmElement<P, T> {}
 
@@ -290,93 +306,99 @@ declare namespace Hmm {
   // ----------------------------------------------------------------------
 
   // DOM Elements
-  function createFactory<T extends HTMLElement>(
-    type: keyof HmmHTML
-  ): HTMLFactory<T>;
-  function createFactory(type: keyof HmmSVG): SVGFactory;
-  function createFactory<P extends DOMAttributes<T>, T extends Element>(
-    type: string
-  ): DOMFactory<P, T>;
+  // function createFactory<T extends HTMLElement>(
+  //   type: keyof HmmHTML
+  // ): HTMLFactory<T>;
+  // function createFactory(type: keyof HmmSVG): SVGFactory;
+  // function createFactory<P extends DOMAttributes<T>, T extends Element>(
+  //   type: string
+  // ): DOMFactory<P, T>;
 
-  // Custom components
-  function createFactory<P>(
-    type: FunctionComponent<P>
-  ): FunctionComponentFactory<P>;
-  function createFactory<P>(
-    type: ClassType<
-      P,
-      ClassicComponent<P, ComponentState>,
-      ClassicComponentClass<P>
-    >
-  ): CFactory<P, ClassicComponent<P, ComponentState>>;
-  function createFactory<
-    P,
-    T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
-  >(type: ClassType<P, T, C>): CFactory<P, T>;
-  function createFactory<P>(type: ComponentClass<P>): Factory<P>;
+  // // Custom components
+  // function createFactory<P>(
+  //   type: FunctionComponent<P>
+  // ): FunctionComponentFactory<P>;
+  // function createFactory<P>(
+  //   type: ClassType<
+  //     P,
+  //     ClassicComponent<P, ComponentState>,
+  //     ClassicComponentClass<P>
+  //   >
+  // ): CFactory<P, ClassicComponent<P, ComponentState>>;
+  // function createFactory<
+  //   P,
+  //   T extends Component<P, ComponentState>,
+  //   C extends ComponentClass<P>
+  // >(type: ClassType<P, T, C>): CFactory<P, T>;
+  // function createFactory<P>(type: ComponentClass<P>): Factory<P>;
 
   // DOM Elements
   // TODO: generalize this to everything in `keyof HmmHTML`, not just "input"
-  function createElement(
-    type: "input",
-    props?:
-      | (InputHTMLAttributes<HTMLInputElement> &
-          ClassAttributes<HTMLInputElement>)
-      | null,
-    ...children: HmmNode[]
-  ): DetailedHmmHTMLElement<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >;
-  function createElement<P extends HTMLAttributes<T>, T extends HTMLElement>(
-    type: keyof HmmHTML,
-    props?: (ClassAttributes<T> & P) | null,
-    ...children: HmmNode[]
-  ): DetailedHmmHTMLElement<P, T>;
-  function createElement<P extends SVGAttributes<T>, T extends SVGElement>(
-    type: keyof HmmSVG,
-    props?: (ClassAttributes<T> & P) | null,
-    ...children: HmmNode[]
-  ): HmmSVGElement;
-  function createElement<P extends DOMAttributes<T>, T extends Element>(
-    type: string,
-    props?: (ClassAttributes<T> & P) | null,
-    ...children: HmmNode[]
-  ): DOMElement<P, T>;
+  // function createElement(
+  //   type: "input",
+  //   props?:
+  //     | (InputHTMLAttributes<HTMLInputElement> &
+  //         ClassAttributes<HTMLInputElement>)
+  //     | null,
+  //   ...children: HmmNode[]
+  // ): DetailedHmmHTMLElement<
+  //   InputHTMLAttributes<HTMLInputElement>,
+  //   HTMLInputElement
+  // >;
+  // function createElement<P extends HTMLAttributes<T>, T extends HTMLElement>(
+  //   type: keyof HmmHTML,
+  //   props?: (ClassAttributes<T> & P) | null,
+  //   ...children: HmmNode[]
+  // ): DetailedHmmHTMLElement<P, T>;
+  // function createElement<P extends SVGAttributes<T>, T extends SVGElement>(
+  //   type: keyof HmmSVG,
+  //   props?: (ClassAttributes<T> & P) | null,
+  //   ...children: HmmNode[]
+  // ): HmmSVGElement;
+  // function createElement<P extends DOMAttributes<T>, T extends Element>(
+  //   type: string,
+  //   props?: (ClassAttributes<T> & P) | null,
+  //   ...children: HmmNode[]
+  // ): DOMElement<P, T>;
 
   // Custom components
 
-  function createElement<P extends {}>(
-    type: FunctionComponent<P>,
-    props?: (Attributes & P) | null,
-    ...children: HmmNode[]
-  ): FunctionComponentElement<P>;
-  function createElement<P extends {}>(
-    type: ClassType<
-      P,
-      ClassicComponent<P, ComponentState>,
-      ClassicComponentClass<P>
-    >,
-    props?:
-      | (ClassAttributes<ClassicComponent<P, ComponentState>, P> & P)
-      | null,
-    ...children: HmmNode[]
-  ): CElement<P, ClassicComponent<P, ComponentState>>;
-  function createElement<
-    P extends {},
-    T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
-  >(
-    type: ClassType<P, T, C>,
-    props?: (ClassAttributes<T, P> & P) | null,
-    ...children: HmmNode[]
-  ): CElement<P, T>;
-  function createElement<P extends {}>(
-    type: FunctionComponent<P> | ComponentClass<P> | string,
-    props?: (Attributes & P) | null,
-    ...children: HmmNode[]
-  ): HmmElement<P>;
+  // function createElement<P extends {}>(
+  //   type: FunctionComponent<P>,
+  //   props?: (Attributes & P) | null,
+  //   ...children: HmmNode[]
+  // ): FunctionComponentElement<P>;
+  // function createElement<P extends {}>(
+  //   type: ClassType<
+  //     P,
+  //     ClassicComponent<P, ComponentState>,
+  //     ClassicComponentClass<P>
+  //   >,
+  //   props?:
+  //     | (ClassAttributes<ClassicComponent<P, ComponentState>, P> & P)
+  //     | null,
+  //   ...children: HmmNode[]
+  // ): CElement<P, ClassicComponent<P, ComponentState>>;
+  // function createElement<
+  //   P extends {},
+  //   T extends Component<P, ComponentState>,
+  //   C extends ComponentClass<P>
+  // >(
+  //   type: ClassType<P, T, C>,
+  //   props?: (ClassAttributes<T, P> & P) | null,
+  //   ...children: HmmNode[]
+  // ): CElement<P, T>;
+  // function createElement<P extends {}>(
+  //   type: FunctionComponent<P> | ComponentClass<P> | string,
+  //   props?: (Attributes & P) | null,
+  //   ...children: HmmNode[]
+  // ): HmmElement<P>;
+  // // Observables
+  // function createElement<T>(
+  //   type: rxjs.Observable<T>,
+  //   props?: Attributes & { next: (value: T) => HmmNode },
+  //   ...children: HmmNode[]
+  // ): HmmElement<P>;
 
   // DOM Elements
   // HmmHTMLElement
@@ -945,6 +967,8 @@ declare namespace Hmm {
     ? P
     : T extends keyof JSX.IntrinsicElements
     ? JSX.IntrinsicElements[T]
+    : T extends rxjs.Observable<infer N>
+    ? { next: (value: N) => HmmNode }
     : {};
   type ComponentPropsWithRef<T extends ElementType> = T extends ComponentClass<
     infer P
@@ -3266,16 +3290,16 @@ type HmmManagedAttributes<C, P> = C extends {
 declare global {
   namespace JSX {
     // tslint:disable-next-line:no-empty-interface
-    interface Element extends Hmm.HmmElement<any, any> {}
+    // interface Element extends Hmm.HmmElement<any, any> {}
     // interface ElementClass extends Hmm.Component<any> {
     //   render(): Hmm.HmmNode;
     // }
-    interface ElementAttributesProperty {
-      props: {};
-    }
-    interface ElementChildrenAttribute {
-      children: {};
-    }
+    // interface ElementAttributesProperty {
+    //   props: {};
+    // }
+    // interface ElementChildrenAttribute {
+    //   children: {};
+    // }
 
     // // We can't recurse forever because `type` can't be self-referential;
     // // let's assume it's reasonable to do a single Hmm.lazy() around a single Hmm.memo() / vice-versa
@@ -3286,9 +3310,9 @@ declare global {
     //     : HmmManagedAttributes<C, P>;
 
     // tslint:disable-next-line:no-empty-interface
-    interface IntrinsicAttributes extends Hmm.Attributes {}
+    // interface IntrinsicAttributes extends Hmm.Attributes {}
     // tslint:disable-next-line:no-empty-interface
-    interface IntrinsicClassAttributes<T> extends Hmm.ClassAttributes<T> {}
+    // interface IntrinsicClassAttributes<T> extends Hmm.ClassAttributes<T> {}
 
     interface IntrinsicElements {
       // HTML

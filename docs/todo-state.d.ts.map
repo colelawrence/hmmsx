@@ -1,0 +1,1 @@
+{"version":3,"file":"todo-state.d.ts","sourceRoot":"","sources":["../src/todo-state.ts"],"names":[],"mappings":"AAAA,OAAO,EAAiB,QAAQ,EAAgB,MAAM,gBAAgB,CAAC;AAEvE,UAAU,IAAI;IACZ,EAAE,EAAE,MAAM,CAAC;IACX,IAAI,EAAE,OAAO,CAAC;IACd,KAAK,EAAE,MAAM,CAAC;CACf;AAID,wBAAgB,eAAe,CAAC,YAAY,GAAE,IAAI,EAAO;;;;;;;EAkCxD"}

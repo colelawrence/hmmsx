@@ -9,22 +9,22 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "jsx": "react",
-    "jsxFactory": "createHmmNode",
+    "jsxFactory": "hmm",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "stripInternal": true,
     "skipLibCheck": true,
     "strict": true,
-    "types": ["rxjs"]
+    "types": ["rxjs", "behavior-state"]
   },
   "typeAcquisition": {
     "enable": false,
     "exclude": ["react"]
   },
   "files": [
-    "src/rxjs.d.ts",
     "src/jsx.d.ts",
+    "src/todo-state.ts",
     "src/createHmmNode.ts",
     "src/index.ts",
     "src/test.tsx"

@@ -10,12 +10,21 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-function createHmmNode(tag, props, ...children) {
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-ignore
+createHmmNode = (tag, props, ...children) => {
     const element = document.createElement(tag);
     if (props != null) {
-        const { $attrs, $children } = props, rest = __rest(props, ["$attrs", "$children"]);
+        const { $attrs, $style, $children } = props, rest = __rest(props, ["$attrs", "$style", "$children"]);
         applyAttrs(element, rest);
         const subs = [];
+        if ($style) {
+            $style(function style(from, next) {
+                subs.push(from.subscribe(value => {
+                    Object.assign(element.style, next(value));
+                }));
+            });
+        }
         if ($attrs) {
             $attrs(function attrs(from, next) {
                 subs.push(from.subscribe(value => {
@@ -33,6 +42,13 @@ function createHmmNode(tag, props, ...children) {
                         element.replaceChild(newChild, currentNode);
                         currentNode = newChild;
                     }
+                    else if (newHmmNode instanceof Array) {
+                        const childContainer = appendAll(newHmmNode);
+                        const newChild = document.createElement("hmm-child");
+                        newChild.appendChild(childContainer);
+                        element.replaceChild(newChild, currentNode);
+                        currentNode = newChild;
+                    }
                     else if (currentNode instanceof Text) {
                         currentNode.textContent = String(newHmmNode);
                     }
@@ -43,24 +59,36 @@ function createHmmNode(tag, props, ...children) {
                     }
                 }));
             }, function children(from, next) {
-                // TODO: figure out a way to track multiple children without an extra container
-                // is there an html fragment?
+                let currentNode = element.appendChild(document.createElement(`hmm-list`));
+                subs.push(from.subscribe(order => {
+                    // order.map()
+                    // todo...
+                }));
             });
         }
     }
     if (children) {
-        let frag = document.createDocumentFragment();
-        for (const child of children) {
-            if (child instanceof Node) {
-                frag.appendChild(child);
-            }
-            else {
-                console.warn(`Found non-node from hmm: ${child}`);
-            }
-        }
-        element.appendChild(frag);
+        element.appendChild(appendAll(children));
     }
     return element;
+};
+function appendAll(children, frag = document.createDocumentFragment()) {
+    for (const child of children) {
+        if (child instanceof Node) {
+            frag.appendChild(child);
+        }
+        else if (child instanceof Array) {
+            // probably want to do that keying thing here...
+            appendAll(child, frag);
+        }
+        else if (typeof child === "object" || typeof child === "function") {
+            console.warn(`Found non-node from hmm: ${child}`);
+        }
+        else if (child) {
+            frag.appendChild(document.createTextNode(String(child)));
+        }
+    }
+    return frag;
 }
 function applyAttrs(element, _a) {
     var { style } = _a, props = __rest(_a, ["style"]);

@@ -1,15 +1,65 @@
-function createHmmNode(
-  tag: keyof Hmm.HmmHTML,
-  props: any,
-  ...children: Hmm.HmmNode[]
-): Hmm.HmmNode {
+import { Observable, Subscription } from "rxjs";
+import { Behavior, BehaviorArray, ObservableList} from "behavior-state";
+
+interface CreateHmmNode {
+  (tag: keyof Hmm.HmmHTML, props: any, ...children: Hmm.HmmNode[]): Hmm.HmmNode;
+  <T>(
+    tag: Observable<T>,
+    props: { next: (value: T) => Hmm.HmmNode }
+  ): Hmm.HmmNode;
+}
+
+declare module "rxjs" {
+  export interface Observable<T> {
+    jsx: (props: { next: (value: T) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+  export interface BehaviorSubject<T> {
+    jsx: (props: { next: (value: T) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+}
+
+declare module "behavior-state/Behavior" {
+  export interface Behavior<T> {
+    jsx: (props: { next: (value: T) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+}
+declare module "behavior-state/BehaviorArray" {
+  export interface BehaviorArray<E> {
+    jsx: (props: { next: (value: E[]) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+}
+declare module "behavior-state/BehaviorList" {
+  export interface ObservableList<E> {
+    jsx: (props: { nextItem: (value: E) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+  export interface IObservableList<E> {
+    jsx: (props: { nextItem: (value: E) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+  export interface BehaviorList<E> {
+    jsx: (props: { nextItem: (value: E) => Hmm.HmmNode }) => Hmm.HmmNode;
+  }
+}
+
+export let hmm: CreateHmmNode;
+// @ts-ignore
+createHmmNode = (tag, props, ...children) => {
   const element = document.createElement(tag) as HTMLElement;
 
   if (props != null) {
-    const { $attrs, $children, ...rest } = props;
+    const { $attrs, $style, $children, ...rest } = props;
     applyAttrs(element, rest);
 
-    const subs: rxjs.Subscription[] = [];
+    const subs: Subscription[] = [];
+    if ($style) {
+      ($style as Hmm.CreateRxStyle)(function style(from, next) {
+        subs.push(
+          from.subscribe(value => {
+            Object.assign(element.style, next(value));
+          })
+        );
+      });
+    }
+
     if ($attrs) {
       ($attrs as Hmm.CreateRxAttrs<unknown>)(function attrs(from, next) {
         subs.push(
@@ -33,6 +83,12 @@ function createHmmNode(
                 const newChild = newHmmNode;
                 element.replaceChild(newChild, currentNode);
                 currentNode = newChild;
+              } else if (newHmmNode instanceof Array) {
+                const childContainer = appendAll(newHmmNode);
+                const newChild = document.createElement("hmm-child");
+                newChild.appendChild(childContainer);
+                element.replaceChild(newChild, currentNode);
+                currentNode = newChild;
               } else if (currentNode instanceof Text) {
                 currentNode.textContent = String(newHmmNode);
               } else {
@@ -44,26 +100,44 @@ function createHmmNode(
           );
         },
         function children(from, next) {
-          // TODO: figure out a way to track multiple children without an extra container
-          // is there an html fragment?
+          let currentNode: Node = element.appendChild(
+            document.createElement(`hmm-list`)
+          );
+          subs.push(
+            from.subscribe(order => {
+              // order.map()
+              // todo...
+            })
+          );
         }
       );
     }
   }
 
   if (children) {
-    let frag = document.createDocumentFragment();
-    for (const child of children) {
-      if (child instanceof Node) {
-        frag.appendChild(child);
-      } else {
-        console.warn(`Found non-node from hmm: ${child}`);
-      }
-    }
-    element.appendChild(frag);
+    element.appendChild(appendAll(children));
   }
 
   return element;
+};
+
+function appendAll(
+  children: Hmm.HmmNode[],
+  frag: Node = document.createDocumentFragment()
+) {
+  for (const child of children) {
+    if (child instanceof Node) {
+      frag.appendChild(child);
+    } else if (child instanceof Array) {
+      // probably want to do that keying thing here...
+      appendAll(child, frag);
+    } else if (typeof child === "object" || typeof child === "function") {
+      console.warn(`Found non-node from hmm: ${child}`);
+    } else if (child) {
+      frag.appendChild(document.createTextNode(String(child)));
+    }
+  }
+  return frag;
 }
 
 function applyAttrs(element: HTMLElement, { style, ...props }: any) {
