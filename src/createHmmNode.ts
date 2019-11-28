@@ -40,7 +40,7 @@ declare module "behavior-state/BehaviorList" {
   }
 }
 
-export let hmm: CreateHmmNode;
+export let createHmmNode: CreateHmmNode;
 // @ts-ignore
 createHmmNode = (tag, props, ...children) => {
   const element = document.createElement(tag) as HTMLElement;

@@ -1,6 +1,6 @@
 import { Behavior } from "behavior-state";
 import { distinctUntilChanged, map } from "rxjs/operators";
-import { hmm } from "./createHmmNode";
+import { createHmmNode } from "../src/createHmmNode";
 import { createTodoState } from "./todo-state";
 
 function generator(
@@ -62,7 +62,9 @@ function App(props: { fontSize: number }, ctx: Hmm.Ctx) {
         <input
           type="text"
           onChange={evt => state.updateNewTodoInput(evt.target.value)}
-          $attrs={a => a(state.$todoInput, v => ({ value: v }))}
+          $attrs={a => {
+            a(state.$todoInput, v => ({ value: v }))
+          }}
         />
         <button>Add Todo</button>
       </form>

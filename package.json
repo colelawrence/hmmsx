@@ -5,12 +5,16 @@
   "version": "0.0.1",
   "scripts": {
     "build": "yarn clean && yarn build-dist",
+    "start": "node ./test/start.js",
     "clean": "rm -f *.d.ts *.js *.map",
     "build-dist": "tsc --outDir ./"
   },
   "main": "index.js",
   "devDependencies": {
-    "typescript": "^3.7.2"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
     "behavior-state": "^0.0.8",

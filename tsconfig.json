@@ -9,7 +9,7 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "jsx": "react",
-    "jsxFactory": "hmm",
+    "jsxFactory": "createHmmNode",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -24,9 +24,9 @@
   },
   "files": [
     "src/jsx.d.ts",
-    "src/todo-state.ts",
+    "test/todo-state.ts",
     "src/createHmmNode.ts",
     "src/index.ts",
-    "src/test.tsx"
+    "test/test.tsx"
   ]
 }
