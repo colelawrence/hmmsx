@@ -2,7 +2,7 @@
   "name": "dotjsx",
   "description": "Experimental DOM JSX library",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "build": "yarn clean && yarn build-dist",
     "start": "node ./test/start.js",
@@ -10,7 +10,11 @@
     "build-dist": "tsc --outDir ./"
   },
   "main": "index.js",
+  "peerDependencies": {
+    "rxjs": "^7"
+  },
   "devDependencies": {
+    "rxjs": "^7.0.0-alpha.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "typestyle": "^2.0.4",
@@ -18,7 +22,6 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
-    "behavior-state": "^0.0.8",
-    "rxjs": "^7.0.0-alpha.0"
+    "snabbdom": "^0.7.3"
   }
 }
