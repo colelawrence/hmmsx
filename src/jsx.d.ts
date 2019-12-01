@@ -1,4 +1,4 @@
-// Type definitions for Hmm 16.9
+// Type definitions for Dot 16.9
 // Project: http://facebook.github.io/react/
 // Definitions by: Asana <https://asana.com>
 //                 AssureSign <http://www.assuresign.com>
@@ -24,7 +24,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.8
 
-// NOTE: Users of the `experimental` builds of Hmm should add a reference
+// NOTE: Users of the `experimental` builds of Dot should add a reference
 // to 'react/experimental' in their project. See experimental.d.ts's top comment
 // for reference and documentation on how exactly to do it.
 
@@ -55,12 +55,12 @@ interface SchedulerInteraction {
 }
 
 // tslint:disable-next-line:export-just-namespace
-export = Hmm;
-export as namespace Hmm;
+export = Dot;
+export as namespace Dot;
 
-declare namespace Hmm {
+declare namespace Dot {
   //
-  // Hmm Elements
+  // Dot Elements
   // ----------------------------------------------------------------------
 
   type ElementType<P = any> =
@@ -74,7 +74,7 @@ declare namespace Hmm {
   type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
 
   type JSXElementConstructor<P> =
-    | ((props: P) => HmmElement | null)
+    | ((props: P) => DotElement | null)
     | rxjs.Observable<any>
     | (new (props: P) => Component<P, any>);
 
@@ -86,7 +86,7 @@ declare namespace Hmm {
 
   type ComponentState = any;
 
-  // Hmm stuff
+  // Dot stuff
   interface Ctx {}
   interface Builders<Elt> {
     (
@@ -96,7 +96,7 @@ declare namespace Hmm {
       ) => void,
       child: <T>(
         from: rxjs.Observable<T>,
-        next: (value: T) => HmmNode
+        next: (value: T) => DotNode
       ) => unknown
     ): void;
   }
@@ -134,11 +134,11 @@ declare namespace Hmm {
     (
       child: <P>(
         from: rxjs.Observable<P>,
-        next: (value: P) => Hmm.Node
+        next: (value: P) => Dot.DotNode
       ) => void,
       children: <P>(
         from: rxjs.Observable<rxjs.Observable<P>[]>,
-        nextChild: (value: P) => Hmm.Node
+        nextChild: (value: P) => Dot.DotNode
       ) => void
     ): void;
   }
@@ -150,7 +150,7 @@ declare namespace Hmm {
     // ref?: Ref<T>;
   }
 
-  interface HmmElement<
+  interface DotElement<
     P = any,
     T extends string | JSXElementConstructor<any> | rxjs.Observable<any> =
       | string
@@ -162,13 +162,13 @@ declare namespace Hmm {
     key: Key | null;
   }
 
-  interface HmmComponentElement<
+  interface DotComponentElement<
     T extends
       | keyof JSX.IntrinsicElements
       | JSXElementConstructor<any>
       | rxjs.Observable<any>,
     P = Pick<ComponentProps<T>, Exclude<keyof ComponentProps<T>, "key" | "ref">>
-  > extends HmmElement<P, T> {}
+  > extends DotElement<P, T> {}
 
   /**
    * @deprecated Please use `FunctionComponentElement`
@@ -176,7 +176,7 @@ declare namespace Hmm {
   type SFCElement<P> = FunctionComponentElement<P>;
 
   interface FunctionComponentElement<P>
-    extends HmmElement<P, FunctionComponent<P>> {
+    extends DotElement<P, FunctionComponent<P>> {
     ref?: "ref" extends keyof P
       ? P extends { ref?: infer R }
         ? R
@@ -189,7 +189,7 @@ declare namespace Hmm {
     T
   >;
   interface ComponentElement<P, T extends Component<P, ComponentState>>
-    extends HmmElement<P, ComponentClass<P>> {
+    extends DotElement<P, ComponentClass<P>> {
     ref?: LegacyRef<T>;
   }
 
@@ -199,31 +199,31 @@ declare namespace Hmm {
   interface DOMElement<
     P extends HTMLAttributes<T> | SVGAttributes<T>,
     T extends Element
-  > extends HmmElement<P, string> {
+  > extends DotElement<P, string> {
     ref: LegacyRef<T>;
   }
 
-  // HmmHTML for HmmHTMLElement
+  // DotHTML for DotHTMLElement
   // tslint:disable-next-line:no-empty-interface
-  interface HmmHTMLElement<T extends HTMLElement>
-    extends DetailedHmmHTMLElement<AllHTMLAttributes<T>, T> {}
+  interface DotHTMLElement<T extends HTMLElement>
+    extends DetailedDotHTMLElement<AllHTMLAttributes<T>, T> {}
 
-  interface DetailedHmmHTMLElement<
+  interface DetailedDotHTMLElement<
     P extends HTMLAttributes<T>,
     T extends HTMLElement
   > extends DOMElement<P, T> {
-    type: keyof HmmHTML;
+    type: keyof DotHTML;
   }
 
-  // HmmSVG for HmmSVGElement
-  interface HmmSVGElement
+  // DotSVG for DotSVGElement
+  interface DotSVGElement
     extends DOMElement<SVGAttributes<SVGElement>, SVGElement> {
-    type: keyof HmmSVG;
+    type: keyof DotSVG;
   }
 
-  interface HmmPortal extends HmmElement {
+  interface DotPortal extends DotElement {
     key: Key | null;
-    children: HmmNode;
+    children: DotNode;
   }
 
   //
@@ -232,8 +232,8 @@ declare namespace Hmm {
 
   type Factory<P> = (
     props?: Attributes & P,
-    ...children: HmmNode[]
-  ) => HmmElement<P>;
+    ...children: DotNode[]
+  ) => DotElement<P>;
 
   /**
    * @deprecated Please use `FunctionComponentFactory`
@@ -242,12 +242,12 @@ declare namespace Hmm {
 
   type FunctionComponentFactory<P> = (
     props?: Attributes & P,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ) => FunctionComponentElement<P>;
 
   type ComponentFactory<P, T extends Component<P, ComponentState>> = (
     props?: ClassAttributes<T> & P,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ) => CElement<P, T>;
 
   type CFactory<P, T extends Component<P, ComponentState>> = ComponentFactory<
@@ -258,7 +258,7 @@ declare namespace Hmm {
 
   type DOMFactory<P extends DOMAttributes<T>, T extends Element> = (
     props?: (ClassAttributes<T> & P) | null,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ) => DOMElement<P, T>;
 
   // tslint:disable-next-line:no-empty-interface
@@ -271,32 +271,32 @@ declare namespace Hmm {
   > extends DOMFactory<P, T> {
     (
       props?: (ClassAttributes<T, P> & P) | null,
-      ...children: HmmNode[]
-    ): DetailedHmmHTMLElement<P, T>;
+      ...children: DotNode[]
+    ): DetailedDotHTMLElement<P, T>;
   }
 
   interface SVGFactory
     extends DOMFactory<SVGAttributes<SVGElement>, SVGElement> {
     (
       props?: (ClassAttributes<SVGElement> & SVGAttributes<SVGElement>) | null,
-      ...children: HmmNode[]
-    ): HmmSVGElement;
+      ...children: DotNode[]
+    ): DotSVGElement;
   }
 
   //
-  // Hmm Nodes
+  // Dot Nodes
   // http://facebook.github.io/react/docs/glossary.html
   // ----------------------------------------------------------------------
 
-  type HmmText = string | number;
-  type HmmChild = HmmElement | HmmText;
+  type DotText = string | number;
+  type DotChild = DotElement | DotText;
 
-  interface HmmNodeArray extends Array<HmmNode> {}
-  type HmmFragment = {} | HmmNodeArray;
-  type HmmNode =
-    | HmmChild
-    | HmmFragment
-    | HmmPortal
+  interface DotNodeArray extends Array<DotNode> {}
+  type DotFragment = {} | DotNodeArray;
+  type DotNode =
+    | DotChild
+    | DotFragment
+    | DotPortal
     | boolean
     | null
     | undefined;
@@ -307,9 +307,9 @@ declare namespace Hmm {
 
   // DOM Elements
   // function createFactory<T extends HTMLElement>(
-  //   type: keyof HmmHTML
+  //   type: keyof DotHTML
   // ): HTMLFactory<T>;
-  // function createFactory(type: keyof HmmSVG): SVGFactory;
+  // function createFactory(type: keyof DotSVG): SVGFactory;
   // function createFactory<P extends DOMAttributes<T>, T extends Element>(
   //   type: string
   // ): DOMFactory<P, T>;
@@ -333,32 +333,32 @@ declare namespace Hmm {
   // function createFactory<P>(type: ComponentClass<P>): Factory<P>;
 
   // DOM Elements
-  // TODO: generalize this to everything in `keyof HmmHTML`, not just "input"
+  // TODO: generalize this to everything in `keyof DotHTML`, not just "input"
   // function createElement(
   //   type: "input",
   //   props?:
   //     | (InputHTMLAttributes<HTMLInputElement> &
   //         ClassAttributes<HTMLInputElement>)
   //     | null,
-  //   ...children: HmmNode[]
-  // ): DetailedHmmHTMLElement<
+  //   ...children: DotNode[]
+  // ): DetailedDotHTMLElement<
   //   InputHTMLAttributes<HTMLInputElement>,
   //   HTMLInputElement
   // >;
   // function createElement<P extends HTMLAttributes<T>, T extends HTMLElement>(
-  //   type: keyof HmmHTML,
+  //   type: keyof DotHTML,
   //   props?: (ClassAttributes<T> & P) | null,
-  //   ...children: HmmNode[]
-  // ): DetailedHmmHTMLElement<P, T>;
+  //   ...children: DotNode[]
+  // ): DetailedDotHTMLElement<P, T>;
   // function createElement<P extends SVGAttributes<T>, T extends SVGElement>(
-  //   type: keyof HmmSVG,
+  //   type: keyof DotSVG,
   //   props?: (ClassAttributes<T> & P) | null,
-  //   ...children: HmmNode[]
-  // ): HmmSVGElement;
+  //   ...children: DotNode[]
+  // ): DotSVGElement;
   // function createElement<P extends DOMAttributes<T>, T extends Element>(
   //   type: string,
   //   props?: (ClassAttributes<T> & P) | null,
-  //   ...children: HmmNode[]
+  //   ...children: DotNode[]
   // ): DOMElement<P, T>;
 
   // Custom components
@@ -366,7 +366,7 @@ declare namespace Hmm {
   // function createElement<P extends {}>(
   //   type: FunctionComponent<P>,
   //   props?: (Attributes & P) | null,
-  //   ...children: HmmNode[]
+  //   ...children: DotNode[]
   // ): FunctionComponentElement<P>;
   // function createElement<P extends {}>(
   //   type: ClassType<
@@ -377,7 +377,7 @@ declare namespace Hmm {
   //   props?:
   //     | (ClassAttributes<ClassicComponent<P, ComponentState>, P> & P)
   //     | null,
-  //   ...children: HmmNode[]
+  //   ...children: DotNode[]
   // ): CElement<P, ClassicComponent<P, ComponentState>>;
   // function createElement<
   //   P extends {},
@@ -386,77 +386,77 @@ declare namespace Hmm {
   // >(
   //   type: ClassType<P, T, C>,
   //   props?: (ClassAttributes<T, P> & P) | null,
-  //   ...children: HmmNode[]
+  //   ...children: DotNode[]
   // ): CElement<P, T>;
   // function createElement<P extends {}>(
   //   type: FunctionComponent<P> | ComponentClass<P> | string,
   //   props?: (Attributes & P) | null,
-  //   ...children: HmmNode[]
-  // ): HmmElement<P>;
+  //   ...children: DotNode[]
+  // ): DotElement<P>;
   // // Observables
   // function createElement<T>(
   //   type: rxjs.Observable<T>,
-  //   props?: Attributes & { next: (value: T) => HmmNode },
-  //   ...children: HmmNode[]
-  // ): HmmElement<P>;
+  //   props?: Attributes & { next: (value: T) => DotNode },
+  //   ...children: DotNode[]
+  // ): DotElement<P>;
 
   // DOM Elements
-  // HmmHTMLElement
+  // DotHTMLElement
   function cloneElement<P extends HTMLAttributes<T>, T extends HTMLElement>(
-    element: DetailedHmmHTMLElement<P, T>,
+    element: DetailedDotHTMLElement<P, T>,
     props?: P,
-    ...children: HmmNode[]
-  ): DetailedHmmHTMLElement<P, T>;
-  // HmmHTMLElement, less specific
+    ...children: DotNode[]
+  ): DetailedDotHTMLElement<P, T>;
+  // DotHTMLElement, less specific
   function cloneElement<P extends HTMLAttributes<T>, T extends HTMLElement>(
-    element: HmmHTMLElement<T>,
+    element: DotHTMLElement<T>,
     props?: P,
-    ...children: HmmNode[]
-  ): HmmHTMLElement<T>;
+    ...children: DotNode[]
+  ): DotHTMLElement<T>;
   // SVGElement
   function cloneElement<P extends SVGAttributes<T>, T extends SVGElement>(
-    element: HmmSVGElement,
+    element: DotSVGElement,
     props?: P,
-    ...children: HmmNode[]
-  ): HmmSVGElement;
+    ...children: DotNode[]
+  ): DotSVGElement;
   // DOM Element (has to be the last, because type checking stops at first overload that fits)
   function cloneElement<P extends DOMAttributes<T>, T extends Element>(
     element: DOMElement<P, T>,
     props?: DOMAttributes<T> & P,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ): DOMElement<P, T>;
 
   // Custom components
   function cloneElement<P>(
     element: FunctionComponentElement<P>,
     props?: Partial<P> & Attributes,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ): FunctionComponentElement<P>;
   function cloneElement<P, T extends Component<P, ComponentState>>(
     element: CElement<P, T>,
     props?: Partial<P> & ClassAttributes<T>,
-    ...children: HmmNode[]
+    ...children: DotNode[]
   ): CElement<P, T>;
   function cloneElement<P>(
-    element: HmmElement<P>,
+    element: DotElement<P>,
     props?: Partial<P> & Attributes,
-    ...children: HmmNode[]
-  ): HmmElement<P>;
+    ...children: DotNode[]
+  ): DotElement<P>;
 
   // Context via RenderProps
   interface ProviderProps<T> {
     value: T;
-    children?: HmmNode;
+    children?: DotNode;
   }
 
   interface ConsumerProps<T> {
-    children: (value: T) => HmmNode;
+    children: (value: T) => DotNode;
     unstable_observedBits?: number;
   }
 
   // TODO: similar to how Fragment is actually a symbol, the values returned from createContext,
   // forwardRef and memo are actually objects that are treated specially by the renderer; see:
-  // https://github.com/facebook/react/blob/v16.6.0/packages/react/src/HmmContext.js#L35-L48
+  // https://github.com/facebook/react/blob/v16.6.0/packages/react/src/DotContext.js#L35-L48
   // https://github.com/facebook/react/blob/v16.6.0/packages/react/src/forwardRef.js#L42-L45
   // https://github.com/facebook/react/blob/v16.6.0/packages/react/src/memo.js#L27-L31
   // However, we have no way of telling the JSX parser that it's a JSX element type or its props other than
@@ -468,7 +468,7 @@ declare namespace Hmm {
     /**
      * **NOTE**: Exotic components are not callable.
      */
-    (props: P): HmmElement | null;
+    (props: P): DotElement | null;
     readonly $$typeof: symbol;
   }
 
@@ -502,19 +502,19 @@ declare namespace Hmm {
 
   function isValidElement<P>(
     object: {} | null | undefined
-  ): object is HmmElement<P>;
+  ): object is DotElement<P>;
 
-  const Children: HmmChildren;
-  const Fragment: ExoticComponent<{ children?: HmmNode }>;
-  const StrictMode: ExoticComponent<{ children?: HmmNode }>;
+  const Children: DotChildren;
+  const Fragment: ExoticComponent<{ children?: DotNode }>;
+  const StrictMode: ExoticComponent<{ children?: DotNode }>;
 
   interface SuspenseProps {
-    children?: HmmNode;
+    children?: DotNode;
 
-    /** A fallback react tree to show when a Suspense child (like Hmm.lazy) suspends */
-    fallback: NonNullable<HmmNode> | null;
+    /** A fallback react tree to show when a Suspense child (like Dot.lazy) suspends */
+    fallback: NonNullable<DotNode> | null;
     /**
-     * Tells Hmm whether to “skip” revealing this boundary during the initial load.
+     * Tells Dot whether to “skip” revealing this boundary during the initial load.
      * This API will likely be removed in a future release.
      */
     // NOTE: this is unflagged and is respected even in stable builds
@@ -540,7 +540,7 @@ declare namespace Hmm {
     interactions: Set<SchedulerInteraction>
   ) => void;
   interface ProfilerProps {
-    children?: HmmNode;
+    children?: DotNode;
     id: string;
     onRender: ProfilerOnRenderCallback;
   }
@@ -551,7 +551,7 @@ declare namespace Hmm {
   // Component API
   // ----------------------------------------------------------------------
 
-  type HmmInstance = Component<any> | Element;
+  type DotInstance = Component<any> | Element;
 
   // Base component for plain JS classes
   // tslint:disable-next-line:no-empty-interface
@@ -566,11 +566,11 @@ declare namespace Hmm {
      *
      * ```ts
      * type MyContext = number
-     * const Ctx = Hmm.createContext<MyContext>(0)
+     * const Ctx = Dot.createContext<MyContext>(0)
      *
-     * class Foo extends Hmm.Component {
+     * class Foo extends Dot.Component {
      *   static contextType = Ctx
-     *   context!: Hmm.ContextType<typeof Ctx>
+     *   context!: Dot.ContextType<typeof Ctx>
      *   render () {
      *     return <>My context's value: {this.context}</>;
      *   }
@@ -583,15 +583,15 @@ declare namespace Hmm {
 
     /**
      * If using the new style context, re-declare this in your class to be the
-     * `Hmm.ContextType` of your `static contextType`.
+     * `Dot.ContextType` of your `static contextType`.
      * Should be used with type annotation or static contextType.
      *
      * ```ts
      * static contextType = MyContext
      * // For TS pre-3.7:
-     * context!: Hmm.ContextType<typeof MyContext>
+     * context!: Dot.ContextType<typeof MyContext>
      * // For TS 3.7 and above:
-     * declare context: Hmm.ContextType<typeof MyContext>
+     * declare context: Dot.ContextType<typeof MyContext>
      * ```
      *
      * @see https://reactjs.org/docs/context.html
@@ -620,21 +620,21 @@ declare namespace Hmm {
     ): void;
 
     forceUpdate(callback?: () => void): void;
-    render(): HmmNode;
+    render(): DotNode;
 
-    // Hmm.Props<T> is now deprecated, which means that the `children`
+    // Dot.Props<T> is now deprecated, which means that the `children`
     // property is not available on `P` by default, even though you can
     // always pass children as variadic arguments to `createElement`.
     // In the future, if we can define its call signature conditionally
     // on the existence of `children` in `P`, then we should remove this.
-    readonly props: Readonly<P> & Readonly<{ children?: HmmNode }>;
+    readonly props: Readonly<P> & Readonly<{ children?: DotNode }>;
     state: Readonly<S>;
     /**
      * @deprecated
      * https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs
      */
     refs: {
-      [key: string]: HmmInstance;
+      [key: string]: DotInstance;
     };
   }
 
@@ -655,254 +655,29 @@ declare namespace Hmm {
   // ----------------------------------------------------------------------
 
   /**
-   * @deprecated as of recent Hmm versions, function components can no
+   * @deprecated as of recent Dot versions, function components can no
    * longer be considered 'stateless'. Please use `FunctionComponent` instead.
    *
-   * @see [Hmm Hooks](https://reactjs.org/docs/hooks-intro.html)
+   * @see [Dot Hooks](https://reactjs.org/docs/hooks-intro.html)
    */
   type SFC<P = {}> = FunctionComponent<P>;
 
   /**
-   * @deprecated as of recent Hmm versions, function components can no
+   * @deprecated as of recent Dot versions, function components can no
    * longer be considered 'stateless'. Please use `FunctionComponent` instead.
    *
-   * @see [Hmm Hooks](https://reactjs.org/docs/hooks-intro.html)
+   * @see [Dot Hooks](https://reactjs.org/docs/hooks-intro.html)
    */
   type StatelessComponent<P = {}> = FunctionComponent<P>;
 
   type FC<P = {}> = FunctionComponent<P>;
 
   interface FunctionComponent<P = {}> {
-    (props: PropsWithChildren<P>, context?: any): HmmElement | null;
+    (props: PropsWithChildren<P>, context?: any): DotElement | null;
     propTypes?: WeakValidationMap<P>;
     contextTypes?: ValidationMap<any>;
     defaultProps?: Partial<P>;
     displayName?: string;
-  }
-
-  interface RefForwardingComponent<T, P = {}> {
-    (props: PropsWithChildren<P>, ref: Ref<T>): HmmElement | null;
-    propTypes?: WeakValidationMap<P>;
-    contextTypes?: ValidationMap<any>;
-    defaultProps?: Partial<P>;
-    displayName?: string;
-  }
-
-  interface ComponentClass<P = {}, S = ComponentState>
-    extends StaticLifecycle<P, S> {
-    new (props: P, context?: any): Component<P, S>;
-    propTypes?: WeakValidationMap<P>;
-    contextType?: Context<any>;
-    contextTypes?: ValidationMap<any>;
-    childContextTypes?: ValidationMap<any>;
-    defaultProps?: Partial<P>;
-    displayName?: string;
-  }
-
-  interface ClassicComponentClass<P = {}> extends ComponentClass<P> {
-    new (props: P, context?: any): ClassicComponent<P, ComponentState>;
-    getDefaultProps?(): P;
-  }
-
-  /**
-   * We use an intersection type to infer multiple type parameters from
-   * a single argument, which is useful for many top-level API defs.
-   * See https://github.com/Microsoft/TypeScript/issues/7234 for more info.
-   */
-  type ClassType<
-    P,
-    T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
-  > = C & (new (props: P, context?: any) => T);
-
-  //
-  // Component Specs and Lifecycle
-  // ----------------------------------------------------------------------
-
-  // This should actually be something like `Lifecycle<P, S> | DeprecatedLifecycle<P, S>`,
-  // as Hmm will _not_ call the deprecated lifecycle methods if any of the new lifecycle
-  // methods are present.
-  interface ComponentLifecycle<P, S, SS = any>
-    extends NewLifecycle<P, S, SS>,
-      DeprecatedLifecycle<P, S> {
-    /**
-     * Called immediately after a component is mounted. Setting state here will trigger re-rendering.
-     */
-    componentDidMount?(): void;
-    /**
-     * Called to determine whether the change in props and state should trigger a re-render.
-     *
-     * `Component` always returns true.
-     * `PureComponent` implements a shallow comparison on props and state and returns true if any
-     * props or states have changed.
-     *
-     * If false is returned, `Component#render`, `componentWillUpdate`
-     * and `componentDidUpdate` will not be called.
-     */
-    shouldComponentUpdate?(
-      nextProps: Readonly<P>,
-      nextState: Readonly<S>,
-      nextContext: any
-    ): boolean;
-    /**
-     * Called immediately before a component is destroyed. Perform any necessary cleanup in this method, such as
-     * cancelled network requests, or cleaning up any DOM elements created in `componentDidMount`.
-     */
-    componentWillUnmount?(): void;
-    /**
-     * Catches exceptions generated in descendant components. Unhandled exceptions will cause
-     * the entire component tree to unmount.
-     */
-    componentDidCatch?(error: Error, errorInfo: ErrorInfo): void;
-  }
-
-  // Unfortunately, we have no way of declaring that the component constructor must implement this
-  interface StaticLifecycle<P, S> {
-    getDerivedStateFromProps?: GetDerivedStateFromProps<P, S>;
-    getDerivedStateFromError?: GetDerivedStateFromError<P, S>;
-  }
-
-  type GetDerivedStateFromProps<P, S> =
-    /**
-     * Returns an update to a component's state based on its new props and old state.
-     *
-     * Note: its presence prevents any of the deprecated lifecycle methods from being invoked
-     */
-    (nextProps: Readonly<P>, prevState: S) => Partial<S> | null;
-
-  type GetDerivedStateFromError<P, S> =
-    /**
-     * This lifecycle is invoked after an error has been thrown by a descendant component.
-     * It receives the error that was thrown as a parameter and should return a value to update state.
-     *
-     * Note: its presence prevents any of the deprecated lifecycle methods from being invoked
-     */
-    (error: any) => Partial<S> | null;
-
-  // This should be "infer SS" but can't use it yet
-  interface NewLifecycle<P, S, SS> {
-    /**
-     * Runs before Hmm applies the result of `render` to the document, and
-     * returns an object to be given to componentDidUpdate. Useful for saving
-     * things such as scroll position before `render` causes changes to it.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate prevents any of the deprecated
-     * lifecycle events from running.
-     */
-    getSnapshotBeforeUpdate?(
-      prevProps: Readonly<P>,
-      prevState: Readonly<S>
-    ): SS | null;
-    /**
-     * Called immediately after updating occurs. Not called for the initial render.
-     *
-     * The snapshot is only present if getSnapshotBeforeUpdate is present and returns non-null.
-     */
-    componentDidUpdate?(
-      prevProps: Readonly<P>,
-      prevState: Readonly<S>,
-      snapshot?: SS
-    ): void;
-  }
-
-  interface DeprecatedLifecycle<P, S> {
-    /**
-     * Called immediately before mounting occurs, and before `Component#render`.
-     * Avoid introducing any side-effects or subscriptions in this method.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use componentDidMount or the constructor instead; will stop working in Hmm 17
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    componentWillMount?(): void;
-    /**
-     * Called immediately before mounting occurs, and before `Component#render`.
-     * Avoid introducing any side-effects or subscriptions in this method.
-     *
-     * This method will not stop working in Hmm 17.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use componentDidMount or the constructor instead
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    UNSAFE_componentWillMount?(): void;
-    /**
-     * Called when the component may be receiving new props.
-     * Hmm may call this even if props have not changed, so be sure to compare new and existing
-     * props if you only want to handle changes.
-     *
-     * Calling `Component#setState` generally does not trigger this method.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use static getDerivedStateFromProps instead; will stop working in Hmm 17
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    componentWillReceiveProps?(nextProps: Readonly<P>, nextContext: any): void;
-    /**
-     * Called when the component may be receiving new props.
-     * Hmm may call this even if props have not changed, so be sure to compare new and existing
-     * props if you only want to handle changes.
-     *
-     * Calling `Component#setState` generally does not trigger this method.
-     *
-     * This method will not stop working in Hmm 17.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use static getDerivedStateFromProps instead
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    UNSAFE_componentWillReceiveProps?(
-      nextProps: Readonly<P>,
-      nextContext: any
-    ): void;
-    /**
-     * Called immediately before rendering when new props or state is received. Not called for the initial render.
-     *
-     * Note: You cannot call `Component#setState` here.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use getSnapshotBeforeUpdate instead; will stop working in Hmm 17
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    componentWillUpdate?(
-      nextProps: Readonly<P>,
-      nextState: Readonly<S>,
-      nextContext: any
-    ): void;
-    /**
-     * Called immediately before rendering when new props or state is received. Not called for the initial render.
-     *
-     * Note: You cannot call `Component#setState` here.
-     *
-     * This method will not stop working in Hmm 17.
-     *
-     * Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
-     * prevents this from being invoked.
-     *
-     * @deprecated 16.3, use getSnapshotBeforeUpdate instead
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update
-     * @see https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path
-     */
-    UNSAFE_componentWillUpdate?(
-      nextProps: Readonly<P>,
-      nextState: Readonly<S>,
-      nextContext: any
-    ): void;
   }
 
   interface Mixin<P, S> extends ComponentLifecycle<P, S> {
@@ -921,7 +696,7 @@ declare namespace Hmm {
   }
 
   interface ComponentSpec<P, S> extends Mixin<P, S> {
-    render(): HmmNode;
+    render(): DotNode;
 
     [propertyName: string]: any;
   }
@@ -955,7 +730,7 @@ declare namespace Hmm {
         : P
       : P;
 
-  type PropsWithChildren<P> = P & { children?: HmmNode };
+  type PropsWithChildren<P> = P & { children?: DotNode };
 
   /**
    * NOTE: prefer ComponentPropsWithRef, if the ref is forwarded,
@@ -968,7 +743,7 @@ declare namespace Hmm {
     : T extends keyof JSX.IntrinsicElements
     ? JSX.IntrinsicElements[T]
     : T extends rxjs.Observable<infer N>
-    ? { next: (value: N) => HmmNode }
+    ? { next: (value: N) => DotNode }
     : {};
   type ComponentPropsWithRef<T extends ElementType> = T extends ComponentClass<
     infer P
@@ -1013,261 +788,14 @@ declare namespace Hmm {
   ): LazyExoticComponent<T>;
 
   //
-  // Hmm Hooks
+  // Dot Hooks
   // ----------------------------------------------------------------------
 
   // based on the code in https://github.com/facebook/react/pull/13968
 
-  // Unlike the class component setState, the updates are not allowed to be partial
-  type SetStateAction<S> = S | ((prevState: S) => S);
-  // this technically does accept a second argument, but it's already under a deprecation warning
-  // and it's not even released so probably better to not define it.
-  type Dispatch<A> = (value: A) => void;
-  // Unlike redux, the actions _can_ be anything
-  type Reducer<S, A> = (prevState: S, action: A) => S;
-  // types used to try and prevent the compiler from reducing S
-  // to a supertype common with the second argument to useReducer()
-  type ReducerState<R extends Reducer<any, any>> = R extends Reducer<
-    infer S,
-    any
-  >
-    ? S
-    : never;
-  type ReducerAction<R extends Reducer<any, any>> = R extends Reducer<
-    any,
-    infer A
-  >
-    ? A
-    : never;
-  // The identity check is done with the SameValue algorithm (Object.is), which is stricter than ===
-  // TODO (TypeScript 3.0): ReadonlyArray<unknown>
-  type DependencyList = ReadonlyArray<any>;
-
-  // NOTE: callbacks are _only_ allowed to return either void, or a destructor.
-  // The destructor is itself only allowed to return void.
-  type EffectCallback = () => void | (() => void | undefined);
-
   interface MutableRefObject<T> {
     current: T;
   }
-
-  // This will technically work if you give a Consumer<T> or Provider<T> but it's deprecated and warns
-  /**
-   * Accepts a context object (the value returned from `Hmm.createContext`) and returns the current
-   * context value, as given by the nearest context provider for the given context.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usecontext
-   */
-  function useContext<T>(
-    context: Context<T> /*, (not public API) observedBits?: number|boolean */
-  ): T;
-  /**
-   * Returns a stateful value, and a function to update it.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usestate
-   */
-  function useState<S>(
-    initialState: S | (() => S)
-  ): [S, Dispatch<SetStateAction<S>>];
-  // convenience overload when first argument is ommitted
-  /**
-   * Returns a stateful value, and a function to update it.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usestate
-   */
-  function useState<S = undefined>(): [
-    S | undefined,
-    Dispatch<SetStateAction<S | undefined>>
-  ];
-  /**
-   * An alternative to `useState`.
-   *
-   * `useReducer` is usually preferable to `useState` when you have complex state logic that involves
-   * multiple sub-values. It also lets you optimize performance for components that trigger deep
-   * updates because you can pass `dispatch` down instead of callbacks.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usereducer
-   */
-  // overload where "I" may be a subset of ReducerState<R>; used to provide autocompletion.
-  // If "I" matches ReducerState<R> exactly then the last overload will allow initializer to be ommitted.
-  // the last overload effectively behaves as if the identity function (x => x) is the initializer.
-  function useReducer<R extends Reducer<any, any>, I>(
-    reducer: R,
-    initializerArg: I & ReducerState<R>,
-    initializer: (arg: I & ReducerState<R>) => ReducerState<R>
-  ): [ReducerState<R>, Dispatch<ReducerAction<R>>];
-  /**
-   * An alternative to `useState`.
-   *
-   * `useReducer` is usually preferable to `useState` when you have complex state logic that involves
-   * multiple sub-values. It also lets you optimize performance for components that trigger deep
-   * updates because you can pass `dispatch` down instead of callbacks.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usereducer
-   */
-  // overload for free "I"; all goes as long as initializer converts it into "ReducerState<R>".
-  function useReducer<R extends Reducer<any, any>, I>(
-    reducer: R,
-    initializerArg: I,
-    initializer: (arg: I) => ReducerState<R>
-  ): [ReducerState<R>, Dispatch<ReducerAction<R>>];
-  /**
-   * An alternative to `useState`.
-   *
-   * `useReducer` is usually preferable to `useState` when you have complex state logic that involves
-   * multiple sub-values. It also lets you optimize performance for components that trigger deep
-   * updates because you can pass `dispatch` down instead of callbacks.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usereducer
-   */
-
-  // I'm not sure if I keep this 2-ary or if I make it (2,3)-ary; it's currently (2,3)-ary.
-  // The Flow types do have an overload for 3-ary invocation with undefined initializer.
-
-  // NOTE: without the ReducerState indirection, TypeScript would reduce S to be the most common
-  // supertype between the reducer's return type and the initialState (or the initializer's return type),
-  // which would prevent autocompletion from ever working.
-
-  // TODO: double-check if this weird overload logic is necessary. It is possible it's either a bug
-  // in older versions, or a regression in newer versions of the typescript completion service.
-  function useReducer<R extends Reducer<any, any>>(
-    reducer: R,
-    initialState: ReducerState<R>,
-    initializer?: undefined
-  ): [ReducerState<R>, Dispatch<ReducerAction<R>>];
-  /**
-   * `useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument
-   * (`initialValue`). The returned object will persist for the full lifetime of the component.
-   *
-   * Note that `useRef()` is useful for more than the `ref` attribute. It’s handy for keeping any mutable
-   * value around similar to how you’d use instance fields in classes.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#useref
-   */
-  // TODO (TypeScript 3.0): <T extends unknown>
-  function useRef<T>(initialValue: T): MutableRefObject<T>;
-  // convenience overload for refs given as a ref prop as they typically start with a null value
-  /**
-   * `useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument
-   * (`initialValue`). The returned object will persist for the full lifetime of the component.
-   *
-   * Note that `useRef()` is useful for more than the `ref` attribute. It’s handy for keeping any mutable
-   * value around similar to how you’d use instance fields in classes.
-   *
-   * Usage note: if you need the result of useRef to be directly mutable, include `| null` in the type
-   * of the generic argument.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#useref
-   */
-  // TODO (TypeScript 3.0): <T extends unknown>
-  function useRef<T>(initialValue: T | null): RefObject<T>;
-  // convenience overload for potentially undefined initialValue / call with 0 arguments
-  // has a default to stop it from defaulting to {} instead
-  /**
-   * `useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument
-   * (`initialValue`). The returned object will persist for the full lifetime of the component.
-   *
-   * Note that `useRef()` is useful for more than the `ref` attribute. It’s handy for keeping any mutable
-   * value around similar to how you’d use instance fields in classes.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#useref
-   */
-  // TODO (TypeScript 3.0): <T extends unknown>
-  function useRef<T = undefined>(): MutableRefObject<T | undefined>;
-  /**
-   * The signature is identical to `useEffect`, but it fires synchronously after all DOM mutations.
-   * Use this to read layout from the DOM and synchronously re-render. Updates scheduled inside
-   * `useLayoutEffect` will be flushed synchronously, before the browser has a chance to paint.
-   *
-   * Prefer the standard `useEffect` when possible to avoid blocking visual updates.
-   *
-   * If you’re migrating code from a class component, `useLayoutEffect` fires in the same phase as
-   * `componentDidMount` and `componentDidUpdate`.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#uselayouteffect
-   */
-  function useLayoutEffect(effect: EffectCallback, deps?: DependencyList): void;
-  /**
-   * Accepts a function that contains imperative, possibly effectful code.
-   *
-   * @param effect Imperative function that can return a cleanup function
-   * @param deps If present, effect will only activate if the values in the list change.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#useeffect
-   */
-  function useEffect(effect: EffectCallback, deps?: DependencyList): void;
-  // NOTE: this does not accept strings, but this will have to be fixed by removing strings from type Ref<T>
-  /**
-   * `useImperativeHandle` customizes the instance value that is exposed to parent components when using
-   * `ref`. As always, imperative code using refs should be avoided in most cases.
-   *
-   * `useImperativeHandle` should be used with `Hmm.forwardRef`.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#useimperativehandle
-   */
-  function useImperativeHandle<T, R extends T>(
-    ref: Ref<T> | undefined,
-    init: () => R,
-    deps?: DependencyList
-  ): void;
-  // I made 'inputs' required here and in useMemo as there's no point to memoizing without the memoization key
-  // useCallback(X) is identical to just using X, useMemo(() => Y) is identical to just using Y.
-  /**
-   * `useCallback` will return a memoized version of the callback that only changes if one of the `inputs`
-   * has changed.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usecallback
-   */
-  // TODO (TypeScript 3.0): <T extends (...args: never[]) => unknown>
-  function useCallback<T extends (...args: any[]) => any>(
-    callback: T,
-    deps: DependencyList
-  ): T;
-  /**
-   * `useMemo` will only recompute the memoized value when one of the `deps` has changed.
-   *
-   * Usage note: if calling `useMemo` with a referentially stable function, also give it as the input in
-   * the second argument.
-   *
-   * ```ts
-   * function expensive () { ... }
-   *
-   * function Component () {
-   *   const expensiveResult = useMemo(expensive, [expensive])
-   *   return ...
-   * }
-   * ```
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usememo
-   */
-  // allow undefined, but don't make it optional as that is very likely a mistake
-  function useMemo<T>(factory: () => T, deps: DependencyList | undefined): T;
-  /**
-   * `useDebugValue` can be used to display a label for custom hooks in Hmm DevTools.
-   *
-   * NOTE: We don’t recommend adding debug values to every custom hook.
-   * It’s most valuable for custom hooks that are part of shared libraries.
-   *
-   * @version 16.8.0
-   * @see https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-   */
-  // the name of the custom hook is itself derived from the function name at runtime:
-  // it's just the function name without the "use" prefix.
-  function useDebugValue<T>(value: T, format?: (value: T) => any): void;
 
   //
   // Event System
@@ -1438,7 +966,7 @@ declare namespace Hmm {
     bivarianceHack(event: E): void;
   }["bivarianceHack"];
 
-  type HmmEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
+  type DotEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
 
   type ClipboardEventHandler<T = Element> = EventHandler<ClipboardEvent<T>>;
   type CompositionEventHandler<T = Element> = EventHandler<CompositionEvent<T>>;
@@ -1474,7 +1002,7 @@ declare namespace Hmm {
    * ```
    */
   interface Props<T> {
-    children?: HmmNode;
+    children?: DotNode;
     key?: Key;
     ref?: LegacyRef<T>;
   }
@@ -1490,7 +1018,7 @@ declare namespace Hmm {
   interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes<T> {}
 
   interface DOMAttributes<T> {
-    children?: HmmNode;
+    children?: DotNode;
     dangerouslySetInnerHTML?: {
       __html: string;
     };
@@ -1532,10 +1060,10 @@ declare namespace Hmm {
     onInvalidCapture?: FormEventHandler<T>;
 
     // Image Events
-    onLoad?: HmmEventHandler<T>;
-    onLoadCapture?: HmmEventHandler<T>;
-    onError?: HmmEventHandler<T>; // also a Media Event
-    onErrorCapture?: HmmEventHandler<T>; // also a Media Event
+    onLoad?: DotEventHandler<T>;
+    onLoadCapture?: DotEventHandler<T>;
+    onError?: DotEventHandler<T>; // also a Media Event
+    onErrorCapture?: DotEventHandler<T>; // also a Media Event
 
     // Keyboard Events
     onKeyDown?: KeyboardEventHandler<T>;
@@ -1546,50 +1074,50 @@ declare namespace Hmm {
     onKeyUpCapture?: KeyboardEventHandler<T>;
 
     // Media Events
-    onAbort?: HmmEventHandler<T>;
-    onAbortCapture?: HmmEventHandler<T>;
-    onCanPlay?: HmmEventHandler<T>;
-    onCanPlayCapture?: HmmEventHandler<T>;
-    onCanPlayThrough?: HmmEventHandler<T>;
-    onCanPlayThroughCapture?: HmmEventHandler<T>;
-    onDurationChange?: HmmEventHandler<T>;
-    onDurationChangeCapture?: HmmEventHandler<T>;
-    onEmptied?: HmmEventHandler<T>;
-    onEmptiedCapture?: HmmEventHandler<T>;
-    onEncrypted?: HmmEventHandler<T>;
-    onEncryptedCapture?: HmmEventHandler<T>;
-    onEnded?: HmmEventHandler<T>;
-    onEndedCapture?: HmmEventHandler<T>;
-    onLoadedData?: HmmEventHandler<T>;
-    onLoadedDataCapture?: HmmEventHandler<T>;
-    onLoadedMetadata?: HmmEventHandler<T>;
-    onLoadedMetadataCapture?: HmmEventHandler<T>;
-    onLoadStart?: HmmEventHandler<T>;
-    onLoadStartCapture?: HmmEventHandler<T>;
-    onPause?: HmmEventHandler<T>;
-    onPauseCapture?: HmmEventHandler<T>;
-    onPlay?: HmmEventHandler<T>;
-    onPlayCapture?: HmmEventHandler<T>;
-    onPlaying?: HmmEventHandler<T>;
-    onPlayingCapture?: HmmEventHandler<T>;
-    onProgress?: HmmEventHandler<T>;
-    onProgressCapture?: HmmEventHandler<T>;
-    onRateChange?: HmmEventHandler<T>;
-    onRateChangeCapture?: HmmEventHandler<T>;
-    onSeeked?: HmmEventHandler<T>;
-    onSeekedCapture?: HmmEventHandler<T>;
-    onSeeking?: HmmEventHandler<T>;
-    onSeekingCapture?: HmmEventHandler<T>;
-    onStalled?: HmmEventHandler<T>;
-    onStalledCapture?: HmmEventHandler<T>;
-    onSuspend?: HmmEventHandler<T>;
-    onSuspendCapture?: HmmEventHandler<T>;
-    onTimeUpdate?: HmmEventHandler<T>;
-    onTimeUpdateCapture?: HmmEventHandler<T>;
-    onVolumeChange?: HmmEventHandler<T>;
-    onVolumeChangeCapture?: HmmEventHandler<T>;
-    onWaiting?: HmmEventHandler<T>;
-    onWaitingCapture?: HmmEventHandler<T>;
+    onAbort?: DotEventHandler<T>;
+    onAbortCapture?: DotEventHandler<T>;
+    onCanPlay?: DotEventHandler<T>;
+    onCanPlayCapture?: DotEventHandler<T>;
+    onCanPlayThrough?: DotEventHandler<T>;
+    onCanPlayThroughCapture?: DotEventHandler<T>;
+    onDurationChange?: DotEventHandler<T>;
+    onDurationChangeCapture?: DotEventHandler<T>;
+    onEmptied?: DotEventHandler<T>;
+    onEmptiedCapture?: DotEventHandler<T>;
+    onEncrypted?: DotEventHandler<T>;
+    onEncryptedCapture?: DotEventHandler<T>;
+    onEnded?: DotEventHandler<T>;
+    onEndedCapture?: DotEventHandler<T>;
+    onLoadedData?: DotEventHandler<T>;
+    onLoadedDataCapture?: DotEventHandler<T>;
+    onLoadedMetadata?: DotEventHandler<T>;
+    onLoadedMetadataCapture?: DotEventHandler<T>;
+    onLoadStart?: DotEventHandler<T>;
+    onLoadStartCapture?: DotEventHandler<T>;
+    onPause?: DotEventHandler<T>;
+    onPauseCapture?: DotEventHandler<T>;
+    onPlay?: DotEventHandler<T>;
+    onPlayCapture?: DotEventHandler<T>;
+    onPlaying?: DotEventHandler<T>;
+    onPlayingCapture?: DotEventHandler<T>;
+    onProgress?: DotEventHandler<T>;
+    onProgressCapture?: DotEventHandler<T>;
+    onRateChange?: DotEventHandler<T>;
+    onRateChangeCapture?: DotEventHandler<T>;
+    onSeeked?: DotEventHandler<T>;
+    onSeekedCapture?: DotEventHandler<T>;
+    onSeeking?: DotEventHandler<T>;
+    onSeekingCapture?: DotEventHandler<T>;
+    onStalled?: DotEventHandler<T>;
+    onStalledCapture?: DotEventHandler<T>;
+    onSuspend?: DotEventHandler<T>;
+    onSuspendCapture?: DotEventHandler<T>;
+    onTimeUpdate?: DotEventHandler<T>;
+    onTimeUpdateCapture?: DotEventHandler<T>;
+    onVolumeChange?: DotEventHandler<T>;
+    onVolumeChangeCapture?: DotEventHandler<T>;
+    onWaiting?: DotEventHandler<T>;
+    onWaitingCapture?: DotEventHandler<T>;
 
     // MouseEvents
     onAuxClick?: MouseEventHandler<T>;
@@ -1630,8 +1158,8 @@ declare namespace Hmm {
     onMouseUpCapture?: MouseEventHandler<T>;
 
     // Selection Events
-    onSelect?: HmmEventHandler<T>;
-    onSelectCapture?: HmmEventHandler<T>;
+    onSelect?: DotEventHandler<T>;
+    onSelectCapture?: DotEventHandler<T>;
 
     // Touch Events
     onTouchCancel?: TouchEventHandler<T>;
@@ -1907,7 +1435,7 @@ declare namespace Hmm {
   }
 
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-    // Hmm-specific Attributes
+    // Dot-specific Attributes
     defaultChecked?: boolean;
     defaultValue?: string | number | string[];
     suppressContentEditableWarning?: boolean;
@@ -2496,7 +2024,7 @@ declare namespace Hmm {
   }
 
   // this list is "complete" in that it contains every SVG attribute
-  // that Hmm supports, but the types can be improved.
+  // that Dot supports, but the types can be improved.
   // Full list here: https://facebook.github.io/react/docs/dom-elements.html
   //
   // The three broad type categories are (in order of restrictiveness):
@@ -2802,10 +2330,11 @@ declare namespace Hmm {
   }
 
   //
-  // Hmm.DOM
+  // Dot.DOM
   // ----------------------------------------------------------------------
 
-  interface HmmHTML {
+  interface DotHTML {
+    _: (props?: any | null, ...children: DotNode[]) => HTMLElement,
     a: DetailedHTMLFactory<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
@@ -3088,7 +2617,7 @@ declare namespace Hmm {
     >;
   }
 
-  interface HmmSVG {
+  interface DotSVG {
     animate: SVGFactory;
     circle: SVGFactory;
     clipPath: SVGFactory;
@@ -3146,10 +2675,10 @@ declare namespace Hmm {
     view: SVGFactory;
   }
 
-  interface HmmDOM extends HmmHTML, HmmSVG {}
+  interface DotDOM extends DotHTML, DotSVG {}
 
   //
-  // Hmm.PropTypes
+  // Dot.PropTypes
   // ----------------------------------------------------------------------
 
   type Validator<T> = PropTypes.Validator<T>;
@@ -3166,7 +2695,7 @@ declare namespace Hmm {
       : Validator<T[K]>;
   };
 
-  interface HmmPropTypes {
+  interface DotPropTypes {
     any: typeof PropTypes.any;
     array: typeof PropTypes.array;
     bool: typeof PropTypes.bool;
@@ -3186,10 +2715,10 @@ declare namespace Hmm {
   }
 
   //
-  // Hmm.Children
+  // Dot.Children
   // ----------------------------------------------------------------------
 
-  interface HmmChildren {
+  interface DotChildren {
     map<T, C>(children: C | C[], fn: (child: C, index: number) => T): T[];
     forEach<C>(children: C | C[], fn: (child: C, index: number) => void): void;
     count(children: any): number;
@@ -3276,7 +2805,7 @@ type Defaultize<P, D> = P extends any
         Partial<Pick<D, Exclude<keyof D, keyof P>>>
   : never;
 
-type HmmManagedAttributes<C, P> = C extends {
+type DotManagedAttributes<C, P> = C extends {
   propTypes: infer T;
   defaultProps: infer D;
 }
@@ -3290,9 +2819,9 @@ type HmmManagedAttributes<C, P> = C extends {
 declare global {
   namespace JSX {
     // tslint:disable-next-line:no-empty-interface
-    // interface Element extends Hmm.HmmElement<any, any> {}
-    // interface ElementClass extends Hmm.Component<any> {
-    //   render(): Hmm.HmmNode;
+    // interface Element extends Dot.DotElement<any, any> {}
+    // interface ElementClass extends Dot.Component<any> {
+    //   render(): Dot.DotNode;
     // }
     // interface ElementAttributesProperty {
     //   props: {};
@@ -3302,467 +2831,467 @@ declare global {
     // }
 
     // // We can't recurse forever because `type` can't be self-referential;
-    // // let's assume it's reasonable to do a single Hmm.lazy() around a single Hmm.memo() / vice-versa
-    // type LibraryManagedAttributes<C, P> = C extends Hmm.MemoExoticComponent<infer T> | Hmm.LazyExoticComponent<infer T>
-    //     ? T extends Hmm.MemoExoticComponent<infer U> | Hmm.LazyExoticComponent<infer U>
-    //         ? HmmManagedAttributes<U, P>
-    //         : HmmManagedAttributes<T, P>
-    //     : HmmManagedAttributes<C, P>;
+    // // let's assume it's reasonable to do a single Dot.lazy() around a single Dot.memo() / vice-versa
+    // type LibraryManagedAttributes<C, P> = C extends Dot.MemoExoticComponent<infer T> | Dot.LazyExoticComponent<infer T>
+    //     ? T extends Dot.MemoExoticComponent<infer U> | Dot.LazyExoticComponent<infer U>
+    //         ? DotManagedAttributes<U, P>
+    //         : DotManagedAttributes<T, P>
+    //     : DotManagedAttributes<C, P>;
 
     // tslint:disable-next-line:no-empty-interface
-    // interface IntrinsicAttributes extends Hmm.Attributes {}
+    // interface IntrinsicAttributes extends Dot.Attributes {}
     // tslint:disable-next-line:no-empty-interface
-    // interface IntrinsicClassAttributes<T> extends Hmm.ClassAttributes<T> {}
+    // interface IntrinsicClassAttributes<T> extends Dot.ClassAttributes<T> {}
 
     interface IntrinsicElements {
       // HTML
-      a: Hmm.DetailedHTMLProps<
-        Hmm.AnchorHTMLAttributes<HTMLAnchorElement>,
+      a: Dot.DetailedHTMLProps<
+        Dot.AnchorHTMLAttributes<HTMLAnchorElement>,
         HTMLAnchorElement
       >;
-      abbr: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      address: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      abbr: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      address: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      area: Hmm.DetailedHTMLProps<
-        Hmm.AreaHTMLAttributes<HTMLAreaElement>,
+      area: Dot.DetailedHTMLProps<
+        Dot.AreaHTMLAttributes<HTMLAreaElement>,
         HTMLAreaElement
       >;
-      article: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      article: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      aside: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      aside: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      audio: Hmm.DetailedHTMLProps<
-        Hmm.AudioHTMLAttributes<HTMLAudioElement>,
+      audio: Dot.DetailedHTMLProps<
+        Dot.AudioHTMLAttributes<HTMLAudioElement>,
         HTMLAudioElement
       >;
-      b: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      base: Hmm.DetailedHTMLProps<
-        Hmm.BaseHTMLAttributes<HTMLBaseElement>,
+      b: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      base: Dot.DetailedHTMLProps<
+        Dot.BaseHTMLAttributes<HTMLBaseElement>,
         HTMLBaseElement
       >;
-      bdi: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      bdo: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      big: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      blockquote: Hmm.DetailedHTMLProps<
-        Hmm.BlockquoteHTMLAttributes<HTMLElement>,
+      bdi: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      bdo: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      big: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      blockquote: Dot.DetailedHTMLProps<
+        Dot.BlockquoteHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      body: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLBodyElement>,
+      body: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLBodyElement>,
         HTMLBodyElement
       >;
-      br: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLBRElement>,
+      br: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLBRElement>,
         HTMLBRElement
       >;
-      button: Hmm.DetailedHTMLProps<
-        Hmm.ButtonHTMLAttributes<HTMLButtonElement>,
+      button: Dot.DetailedHTMLProps<
+        Dot.ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
       >;
-      canvas: Hmm.DetailedHTMLProps<
-        Hmm.CanvasHTMLAttributes<HTMLCanvasElement>,
+      canvas: Dot.DetailedHTMLProps<
+        Dot.CanvasHTMLAttributes<HTMLCanvasElement>,
         HTMLCanvasElement
       >;
-      caption: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      caption: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      cite: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      code: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      col: Hmm.DetailedHTMLProps<
-        Hmm.ColHTMLAttributes<HTMLTableColElement>,
+      cite: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      code: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      col: Dot.DetailedHTMLProps<
+        Dot.ColHTMLAttributes<HTMLTableColElement>,
         HTMLTableColElement
       >;
-      colgroup: Hmm.DetailedHTMLProps<
-        Hmm.ColgroupHTMLAttributes<HTMLTableColElement>,
+      colgroup: Dot.DetailedHTMLProps<
+        Dot.ColgroupHTMLAttributes<HTMLTableColElement>,
         HTMLTableColElement
       >;
-      data: Hmm.DetailedHTMLProps<
-        Hmm.DataHTMLAttributes<HTMLDataElement>,
+      data: Dot.DetailedHTMLProps<
+        Dot.DataHTMLAttributes<HTMLDataElement>,
         HTMLDataElement
       >;
-      datalist: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLDataListElement>,
+      datalist: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLDataListElement>,
         HTMLDataListElement
       >;
-      dd: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      del: Hmm.DetailedHTMLProps<
-        Hmm.DelHTMLAttributes<HTMLElement>,
+      dd: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      del: Dot.DetailedHTMLProps<
+        Dot.DelHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      details: Hmm.DetailedHTMLProps<
-        Hmm.DetailsHTMLAttributes<HTMLElement>,
+      details: Dot.DetailedHTMLProps<
+        Dot.DetailsHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      dfn: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      dialog: Hmm.DetailedHTMLProps<
-        Hmm.DialogHTMLAttributes<HTMLDialogElement>,
+      dfn: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      dialog: Dot.DetailedHTMLProps<
+        Dot.DialogHTMLAttributes<HTMLDialogElement>,
         HTMLDialogElement
       >;
-      div: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLDivElement>,
+      div: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLDivElement>,
         HTMLDivElement
       >;
-      dl: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLDListElement>,
+      dl: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLDListElement>,
         HTMLDListElement
       >;
-      dt: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      em: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      embed: Hmm.DetailedHTMLProps<
-        Hmm.EmbedHTMLAttributes<HTMLEmbedElement>,
+      dt: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      em: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      embed: Dot.DetailedHTMLProps<
+        Dot.EmbedHTMLAttributes<HTMLEmbedElement>,
         HTMLEmbedElement
       >;
-      fieldset: Hmm.DetailedHTMLProps<
-        Hmm.FieldsetHTMLAttributes<HTMLFieldSetElement>,
+      fieldset: Dot.DetailedHTMLProps<
+        Dot.FieldsetHTMLAttributes<HTMLFieldSetElement>,
         HTMLFieldSetElement
       >;
-      figcaption: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      figcaption: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      figure: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      figure: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      footer: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      footer: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      form: Hmm.DetailedHTMLProps<
-        Hmm.FormHTMLAttributes<HTMLFormElement>,
+      form: Dot.DetailedHTMLProps<
+        Dot.FormHTMLAttributes<HTMLFormElement>,
         HTMLFormElement
       >;
-      h1: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h1: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      h2: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h2: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      h3: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h3: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      h4: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h4: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      h5: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h5: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      h6: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadingElement>,
+      h6: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadingElement>,
         HTMLHeadingElement
       >;
-      head: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHeadElement>,
+      head: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHeadElement>,
         HTMLHeadElement
       >;
-      header: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      header: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      hgroup: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      hgroup: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      hr: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLHRElement>,
+      hr: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLHRElement>,
         HTMLHRElement
       >;
-      html: Hmm.DetailedHTMLProps<
-        Hmm.HtmlHTMLAttributes<HTMLHtmlElement>,
+      html: Dot.DetailedHTMLProps<
+        Dot.HtmlHTMLAttributes<HTMLHtmlElement>,
         HTMLHtmlElement
       >;
-      i: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      iframe: Hmm.DetailedHTMLProps<
-        Hmm.IframeHTMLAttributes<HTMLIFrameElement>,
+      i: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      iframe: Dot.DetailedHTMLProps<
+        Dot.IframeHTMLAttributes<HTMLIFrameElement>,
         HTMLIFrameElement
       >;
-      img: Hmm.DetailedHTMLProps<
-        Hmm.ImgHTMLAttributes<HTMLImageElement>,
+      img: Dot.DetailedHTMLProps<
+        Dot.ImgHTMLAttributes<HTMLImageElement>,
         HTMLImageElement
       >;
-      input: Hmm.DetailedHTMLProps<
-        Hmm.InputHTMLAttributes<HTMLInputElement>,
+      input: Dot.DetailedHTMLProps<
+        Dot.InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement
       >;
-      ins: Hmm.DetailedHTMLProps<
-        Hmm.InsHTMLAttributes<HTMLModElement>,
+      ins: Dot.DetailedHTMLProps<
+        Dot.InsHTMLAttributes<HTMLModElement>,
         HTMLModElement
       >;
-      kbd: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      keygen: Hmm.DetailedHTMLProps<
-        Hmm.KeygenHTMLAttributes<HTMLElement>,
+      kbd: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      keygen: Dot.DetailedHTMLProps<
+        Dot.KeygenHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      label: Hmm.DetailedHTMLProps<
-        Hmm.LabelHTMLAttributes<HTMLLabelElement>,
+      label: Dot.DetailedHTMLProps<
+        Dot.LabelHTMLAttributes<HTMLLabelElement>,
         HTMLLabelElement
       >;
-      legend: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLLegendElement>,
+      legend: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLLegendElement>,
         HTMLLegendElement
       >;
-      li: Hmm.DetailedHTMLProps<
-        Hmm.LiHTMLAttributes<HTMLLIElement>,
+      li: Dot.DetailedHTMLProps<
+        Dot.LiHTMLAttributes<HTMLLIElement>,
         HTMLLIElement
       >;
-      link: Hmm.DetailedHTMLProps<
-        Hmm.LinkHTMLAttributes<HTMLLinkElement>,
+      link: Dot.DetailedHTMLProps<
+        Dot.LinkHTMLAttributes<HTMLLinkElement>,
         HTMLLinkElement
       >;
-      main: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      map: Hmm.DetailedHTMLProps<
-        Hmm.MapHTMLAttributes<HTMLMapElement>,
+      main: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      map: Dot.DetailedHTMLProps<
+        Dot.MapHTMLAttributes<HTMLMapElement>,
         HTMLMapElement
       >;
-      mark: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      menu: Hmm.DetailedHTMLProps<
-        Hmm.MenuHTMLAttributes<HTMLElement>,
+      mark: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      menu: Dot.DetailedHTMLProps<
+        Dot.MenuHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      menuitem: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      menuitem: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      meta: Hmm.DetailedHTMLProps<
-        Hmm.MetaHTMLAttributes<HTMLMetaElement>,
+      meta: Dot.DetailedHTMLProps<
+        Dot.MetaHTMLAttributes<HTMLMetaElement>,
         HTMLMetaElement
       >;
-      meter: Hmm.DetailedHTMLProps<
-        Hmm.MeterHTMLAttributes<HTMLElement>,
+      meter: Dot.DetailedHTMLProps<
+        Dot.MeterHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      nav: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      noindex: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      nav: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      noindex: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      noscript: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      noscript: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      object: Hmm.DetailedHTMLProps<
-        Hmm.ObjectHTMLAttributes<HTMLObjectElement>,
+      object: Dot.DetailedHTMLProps<
+        Dot.ObjectHTMLAttributes<HTMLObjectElement>,
         HTMLObjectElement
       >;
-      ol: Hmm.DetailedHTMLProps<
-        Hmm.OlHTMLAttributes<HTMLOListElement>,
+      ol: Dot.DetailedHTMLProps<
+        Dot.OlHTMLAttributes<HTMLOListElement>,
         HTMLOListElement
       >;
-      optgroup: Hmm.DetailedHTMLProps<
-        Hmm.OptgroupHTMLAttributes<HTMLOptGroupElement>,
+      optgroup: Dot.DetailedHTMLProps<
+        Dot.OptgroupHTMLAttributes<HTMLOptGroupElement>,
         HTMLOptGroupElement
       >;
-      option: Hmm.DetailedHTMLProps<
-        Hmm.OptionHTMLAttributes<HTMLOptionElement>,
+      option: Dot.DetailedHTMLProps<
+        Dot.OptionHTMLAttributes<HTMLOptionElement>,
         HTMLOptionElement
       >;
-      output: Hmm.DetailedHTMLProps<
-        Hmm.OutputHTMLAttributes<HTMLElement>,
+      output: Dot.DetailedHTMLProps<
+        Dot.OutputHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      p: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLParagraphElement>,
+      p: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLParagraphElement>,
         HTMLParagraphElement
       >;
-      param: Hmm.DetailedHTMLProps<
-        Hmm.ParamHTMLAttributes<HTMLParamElement>,
+      param: Dot.DetailedHTMLProps<
+        Dot.ParamHTMLAttributes<HTMLParamElement>,
         HTMLParamElement
       >;
-      picture: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      picture: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      pre: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLPreElement>,
+      pre: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLPreElement>,
         HTMLPreElement
       >;
-      progress: Hmm.DetailedHTMLProps<
-        Hmm.ProgressHTMLAttributes<HTMLProgressElement>,
+      progress: Dot.DetailedHTMLProps<
+        Dot.ProgressHTMLAttributes<HTMLProgressElement>,
         HTMLProgressElement
       >;
-      q: Hmm.DetailedHTMLProps<
-        Hmm.QuoteHTMLAttributes<HTMLQuoteElement>,
+      q: Dot.DetailedHTMLProps<
+        Dot.QuoteHTMLAttributes<HTMLQuoteElement>,
         HTMLQuoteElement
       >;
-      rp: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      rt: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      ruby: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      s: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      samp: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      script: Hmm.DetailedHTMLProps<
-        Hmm.ScriptHTMLAttributes<HTMLScriptElement>,
+      rp: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      rt: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      ruby: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      s: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      samp: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      script: Dot.DetailedHTMLProps<
+        Dot.ScriptHTMLAttributes<HTMLScriptElement>,
         HTMLScriptElement
       >;
-      section: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      section: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      select: Hmm.DetailedHTMLProps<
-        Hmm.SelectHTMLAttributes<HTMLSelectElement>,
+      select: Dot.DetailedHTMLProps<
+        Dot.SelectHTMLAttributes<HTMLSelectElement>,
         HTMLSelectElement
       >;
-      small: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      small: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      source: Hmm.DetailedHTMLProps<
-        Hmm.SourceHTMLAttributes<HTMLSourceElement>,
+      source: Dot.DetailedHTMLProps<
+        Dot.SourceHTMLAttributes<HTMLSourceElement>,
         HTMLSourceElement
       >;
-      span: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLSpanElement>,
+      span: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLSpanElement>,
         HTMLSpanElement
       >;
-      strong: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      strong: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      style: Hmm.DetailedHTMLProps<
-        Hmm.StyleHTMLAttributes<HTMLStyleElement>,
+      style: Dot.DetailedHTMLProps<
+        Dot.StyleHTMLAttributes<HTMLStyleElement>,
         HTMLStyleElement
       >;
-      sub: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      summary: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLElement>,
+      sub: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      summary: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      sup: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      table: Hmm.DetailedHTMLProps<
-        Hmm.TableHTMLAttributes<HTMLTableElement>,
+      sup: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      table: Dot.DetailedHTMLProps<
+        Dot.TableHTMLAttributes<HTMLTableElement>,
         HTMLTableElement
       >;
-      template: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTemplateElement>,
+      template: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTemplateElement>,
         HTMLTemplateElement
       >;
-      tbody: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTableSectionElement>,
+      tbody: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTableSectionElement>,
         HTMLTableSectionElement
       >;
-      td: Hmm.DetailedHTMLProps<
-        Hmm.TdHTMLAttributes<HTMLTableDataCellElement>,
+      td: Dot.DetailedHTMLProps<
+        Dot.TdHTMLAttributes<HTMLTableDataCellElement>,
         HTMLTableDataCellElement
       >;
-      textarea: Hmm.DetailedHTMLProps<
-        Hmm.TextareaHTMLAttributes<HTMLTextAreaElement>,
+      textarea: Dot.DetailedHTMLProps<
+        Dot.TextareaHTMLAttributes<HTMLTextAreaElement>,
         HTMLTextAreaElement
       >;
-      tfoot: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTableSectionElement>,
+      tfoot: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTableSectionElement>,
         HTMLTableSectionElement
       >;
-      th: Hmm.DetailedHTMLProps<
-        Hmm.ThHTMLAttributes<HTMLTableHeaderCellElement>,
+      th: Dot.DetailedHTMLProps<
+        Dot.ThHTMLAttributes<HTMLTableHeaderCellElement>,
         HTMLTableHeaderCellElement
       >;
-      thead: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTableSectionElement>,
+      thead: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTableSectionElement>,
         HTMLTableSectionElement
       >;
-      time: Hmm.DetailedHTMLProps<
-        Hmm.TimeHTMLAttributes<HTMLElement>,
+      time: Dot.DetailedHTMLProps<
+        Dot.TimeHTMLAttributes<HTMLElement>,
         HTMLElement
       >;
-      title: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTitleElement>,
+      title: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTitleElement>,
         HTMLTitleElement
       >;
-      tr: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLTableRowElement>,
+      tr: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLTableRowElement>,
         HTMLTableRowElement
       >;
-      track: Hmm.DetailedHTMLProps<
-        Hmm.TrackHTMLAttributes<HTMLTrackElement>,
+      track: Dot.DetailedHTMLProps<
+        Dot.TrackHTMLAttributes<HTMLTrackElement>,
         HTMLTrackElement
       >;
-      u: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      ul: Hmm.DetailedHTMLProps<
-        Hmm.HTMLAttributes<HTMLUListElement>,
+      u: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      ul: Dot.DetailedHTMLProps<
+        Dot.HTMLAttributes<HTMLUListElement>,
         HTMLUListElement
       >;
-      var: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      video: Hmm.DetailedHTMLProps<
-        Hmm.VideoHTMLAttributes<HTMLVideoElement>,
+      var: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      video: Dot.DetailedHTMLProps<
+        Dot.VideoHTMLAttributes<HTMLVideoElement>,
         HTMLVideoElement
       >;
-      wbr: Hmm.DetailedHTMLProps<Hmm.HTMLAttributes<HTMLElement>, HTMLElement>;
-      webview: Hmm.DetailedHTMLProps<
-        Hmm.WebViewHTMLAttributes<HTMLWebViewElement>,
+      wbr: Dot.DetailedHTMLProps<Dot.HTMLAttributes<HTMLElement>, HTMLElement>;
+      webview: Dot.DetailedHTMLProps<
+        Dot.WebViewHTMLAttributes<HTMLWebViewElement>,
         HTMLWebViewElement
       >;
 
       // SVG
-      svg: Hmm.SVGProps<SVGSVGElement>;
+      svg: Dot.SVGProps<SVGSVGElement>;
 
-      animate: Hmm.SVGProps<SVGElement>; // TODO: It is SVGAnimateElement but is not in TypeScript's lib.dom.d.ts for now.
-      animateMotion: Hmm.SVGProps<SVGElement>;
-      animateTransform: Hmm.SVGProps<SVGElement>; // TODO: It is SVGAnimateTransformElement but is not in TypeScript's lib.dom.d.ts for now.
-      circle: Hmm.SVGProps<SVGCircleElement>;
-      clipPath: Hmm.SVGProps<SVGClipPathElement>;
-      defs: Hmm.SVGProps<SVGDefsElement>;
-      desc: Hmm.SVGProps<SVGDescElement>;
-      ellipse: Hmm.SVGProps<SVGEllipseElement>;
-      feBlend: Hmm.SVGProps<SVGFEBlendElement>;
-      feColorMatrix: Hmm.SVGProps<SVGFEColorMatrixElement>;
-      feComponentTransfer: Hmm.SVGProps<SVGFEComponentTransferElement>;
-      feComposite: Hmm.SVGProps<SVGFECompositeElement>;
-      feConvolveMatrix: Hmm.SVGProps<SVGFEConvolveMatrixElement>;
-      feDiffuseLighting: Hmm.SVGProps<SVGFEDiffuseLightingElement>;
-      feDisplacementMap: Hmm.SVGProps<SVGFEDisplacementMapElement>;
-      feDistantLight: Hmm.SVGProps<SVGFEDistantLightElement>;
-      feDropShadow: Hmm.SVGProps<SVGFEDropShadowElement>;
-      feFlood: Hmm.SVGProps<SVGFEFloodElement>;
-      feFuncA: Hmm.SVGProps<SVGFEFuncAElement>;
-      feFuncB: Hmm.SVGProps<SVGFEFuncBElement>;
-      feFuncG: Hmm.SVGProps<SVGFEFuncGElement>;
-      feFuncR: Hmm.SVGProps<SVGFEFuncRElement>;
-      feGaussianBlur: Hmm.SVGProps<SVGFEGaussianBlurElement>;
-      feImage: Hmm.SVGProps<SVGFEImageElement>;
-      feMerge: Hmm.SVGProps<SVGFEMergeElement>;
-      feMergeNode: Hmm.SVGProps<SVGFEMergeNodeElement>;
-      feMorphology: Hmm.SVGProps<SVGFEMorphologyElement>;
-      feOffset: Hmm.SVGProps<SVGFEOffsetElement>;
-      fePointLight: Hmm.SVGProps<SVGFEPointLightElement>;
-      feSpecularLighting: Hmm.SVGProps<SVGFESpecularLightingElement>;
-      feSpotLight: Hmm.SVGProps<SVGFESpotLightElement>;
-      feTile: Hmm.SVGProps<SVGFETileElement>;
-      feTurbulence: Hmm.SVGProps<SVGFETurbulenceElement>;
-      filter: Hmm.SVGProps<SVGFilterElement>;
-      foreignObject: Hmm.SVGProps<SVGForeignObjectElement>;
-      g: Hmm.SVGProps<SVGGElement>;
-      image: Hmm.SVGProps<SVGImageElement>;
-      line: Hmm.SVGProps<SVGLineElement>;
-      linearGradient: Hmm.SVGProps<SVGLinearGradientElement>;
-      marker: Hmm.SVGProps<SVGMarkerElement>;
-      mask: Hmm.SVGProps<SVGMaskElement>;
-      metadata: Hmm.SVGProps<SVGMetadataElement>;
-      mpath: Hmm.SVGProps<SVGElement>;
-      path: Hmm.SVGProps<SVGPathElement>;
-      pattern: Hmm.SVGProps<SVGPatternElement>;
-      polygon: Hmm.SVGProps<SVGPolygonElement>;
-      polyline: Hmm.SVGProps<SVGPolylineElement>;
-      radialGradient: Hmm.SVGProps<SVGRadialGradientElement>;
-      rect: Hmm.SVGProps<SVGRectElement>;
-      stop: Hmm.SVGProps<SVGStopElement>;
-      switch: Hmm.SVGProps<SVGSwitchElement>;
-      symbol: Hmm.SVGProps<SVGSymbolElement>;
-      text: Hmm.SVGProps<SVGTextElement>;
-      textPath: Hmm.SVGProps<SVGTextPathElement>;
-      tspan: Hmm.SVGProps<SVGTSpanElement>;
-      use: Hmm.SVGProps<SVGUseElement>;
-      view: Hmm.SVGProps<SVGViewElement>;
+      animate: Dot.SVGProps<SVGElement>; // TODO: It is SVGAnimateElement but is not in TypeScript's lib.dom.d.ts for now.
+      animateMotion: Dot.SVGProps<SVGElement>;
+      animateTransform: Dot.SVGProps<SVGElement>; // TODO: It is SVGAnimateTransformElement but is not in TypeScript's lib.dom.d.ts for now.
+      circle: Dot.SVGProps<SVGCircleElement>;
+      clipPath: Dot.SVGProps<SVGClipPathElement>;
+      defs: Dot.SVGProps<SVGDefsElement>;
+      desc: Dot.SVGProps<SVGDescElement>;
+      ellipse: Dot.SVGProps<SVGEllipseElement>;
+      feBlend: Dot.SVGProps<SVGFEBlendElement>;
+      feColorMatrix: Dot.SVGProps<SVGFEColorMatrixElement>;
+      feComponentTransfer: Dot.SVGProps<SVGFEComponentTransferElement>;
+      feComposite: Dot.SVGProps<SVGFECompositeElement>;
+      feConvolveMatrix: Dot.SVGProps<SVGFEConvolveMatrixElement>;
+      feDiffuseLighting: Dot.SVGProps<SVGFEDiffuseLightingElement>;
+      feDisplacementMap: Dot.SVGProps<SVGFEDisplacementMapElement>;
+      feDistantLight: Dot.SVGProps<SVGFEDistantLightElement>;
+      feDropShadow: Dot.SVGProps<SVGFEDropShadowElement>;
+      feFlood: Dot.SVGProps<SVGFEFloodElement>;
+      feFuncA: Dot.SVGProps<SVGFEFuncAElement>;
+      feFuncB: Dot.SVGProps<SVGFEFuncBElement>;
+      feFuncG: Dot.SVGProps<SVGFEFuncGElement>;
+      feFuncR: Dot.SVGProps<SVGFEFuncRElement>;
+      feGaussianBlur: Dot.SVGProps<SVGFEGaussianBlurElement>;
+      feImage: Dot.SVGProps<SVGFEImageElement>;
+      feMerge: Dot.SVGProps<SVGFEMergeElement>;
+      feMergeNode: Dot.SVGProps<SVGFEMergeNodeElement>;
+      feMorphology: Dot.SVGProps<SVGFEMorphologyElement>;
+      feOffset: Dot.SVGProps<SVGFEOffsetElement>;
+      fePointLight: Dot.SVGProps<SVGFEPointLightElement>;
+      feSpecularLighting: Dot.SVGProps<SVGFESpecularLightingElement>;
+      feSpotLight: Dot.SVGProps<SVGFESpotLightElement>;
+      feTile: Dot.SVGProps<SVGFETileElement>;
+      feTurbulence: Dot.SVGProps<SVGFETurbulenceElement>;
+      filter: Dot.SVGProps<SVGFilterElement>;
+      foreignObject: Dot.SVGProps<SVGForeignObjectElement>;
+      g: Dot.SVGProps<SVGGElement>;
+      image: Dot.SVGProps<SVGImageElement>;
+      line: Dot.SVGProps<SVGLineElement>;
+      linearGradient: Dot.SVGProps<SVGLinearGradientElement>;
+      marker: Dot.SVGProps<SVGMarkerElement>;
+      mask: Dot.SVGProps<SVGMaskElement>;
+      metadata: Dot.SVGProps<SVGMetadataElement>;
+      mpath: Dot.SVGProps<SVGElement>;
+      path: Dot.SVGProps<SVGPathElement>;
+      pattern: Dot.SVGProps<SVGPatternElement>;
+      polygon: Dot.SVGProps<SVGPolygonElement>;
+      polyline: Dot.SVGProps<SVGPolylineElement>;
+      radialGradient: Dot.SVGProps<SVGRadialGradientElement>;
+      rect: Dot.SVGProps<SVGRectElement>;
+      stop: Dot.SVGProps<SVGStopElement>;
+      switch: Dot.SVGProps<SVGSwitchElement>;
+      symbol: Dot.SVGProps<SVGSymbolElement>;
+      text: Dot.SVGProps<SVGTextElement>;
+      textPath: Dot.SVGProps<SVGTextPathElement>;
+      tspan: Dot.SVGProps<SVGTSpanElement>;
+      use: Dot.SVGProps<SVGUseElement>;
+      view: Dot.SVGProps<SVGViewElement>;
     }
   }
 }

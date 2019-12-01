@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const behavior_state_1 = require("behavior-state");
 const operators_1 = require("rxjs/operators");
-const createHmmNode_1 = require("./createHmmNode");
+const createDotNode_1 = require("./createDotNode");
 const todo_state_1 = require("./todo-state");
 function generator(step, ms, convert) {
     const currentValue = new behavior_state_1.Behavior(0);
@@ -25,21 +25,21 @@ function generator(step, ms, convert) {
 function App(props, ctx) {
     const sineWave = generator(0.05, 17, n => Math.sin(n));
     const state = todo_state_1.createTodoState([{ id: 1, done: false, title: "Todo item" }]);
-    return (createHmmNode_1.hmm("div", { onClick: () => console.log("hello") },
-        createHmmNode_1.hmm("div", { className: "todo-list" },
-            createHmmNode_1.hmm(state.$todos.jsx, { nextItem: todo => (createHmmNode_1.hmm("div", { className: "item", style: {
+    return (createDotNode_1.dot("div", { onClick: () => console.log("hello") },
+        createDotNode_1.dot("div", { className: "todo-list" },
+            createDotNode_1.dot(state.$todos.jsx, { nextItem: todo => (createDotNode_1.dot("div", { className: "item", style: {
                         textDecoration: todo.done ? "line-through" : "normal"
                     }, onClickCapture: () => state.toggleTodo(todo.id) },
                     todo.title,
-                    createHmmNode_1.hmm("button", { onClickCapture: () => state.deleteTodo(todo.id) }, "\uD83D\uDDD1"))) })),
-        createHmmNode_1.hmm("form", { action: "#", onSubmitCapture: evt => {
+                    createDotNode_1.dot("button", { onClickCapture: () => state.deleteTodo(todo.id) }, "\uD83D\uDDD1"))) })),
+        createDotNode_1.dot("form", { action: "#", onSubmitCapture: evt => {
                 evt.preventDefault();
                 state.addTodo();
             } },
-            createHmmNode_1.hmm("input", { type: "text", onChange: evt => state.updateNewTodoInput(evt.target.value), "$attrs": a => a(state.$todoInput, v => ({ value: v })) }),
-            createHmmNode_1.hmm("button", null, "Add Todo")),
-        createHmmNode_1.hmm("br", null),
-        createHmmNode_1.hmm("a", { style: { fontSize: props.fontSize, fontFamily: "monospace" }, onClick: () => {
+            createDotNode_1.dot("input", { type: "text", onChange: evt => state.updateNewTodoInput(evt.target.value), "$attrs": a => a(state.$todoInput, v => ({ value: v })) }),
+            createDotNode_1.dot("button", null, "Add Todo")),
+        createDotNode_1.dot("br", null),
+        createDotNode_1.dot("a", { style: { fontSize: props.fontSize, fontFamily: "monospace" }, onClick: () => {
                 console.log("hello a");
             }, "$style": style => {
                 style(sineWave.$paused, paused => ({
@@ -51,10 +51,10 @@ function App(props, ctx) {
             }, "$children": child => {
                 child(sineWave.$values, val => `${val >= 0 ? "+" + val : val}00000`.slice(0, 7));
             } }),
-        createHmmNode_1.hmm("br", null),
-        createHmmNode_1.hmm("button", { onClickCapture: sineWave.toggle, "$children": child => child(sineWave.$paused, paused => (paused ? "▶️ Play" : "⏸ Pause")) })));
+        createDotNode_1.dot("br", null),
+        createDotNode_1.dot("button", { onClickCapture: sineWave.toggle, "$children": child => child(sineWave.$paused, paused => (paused ? "▶️ Play" : "⏸ Pause")) })));
 }
 document.getElementById("app").appendChild(App({ fontSize: 26 }, {}));
-const a = createHmmNode_1.hmm(App, { fontSize: 13 });
-createHmmNode_1.hmm("textarea", { cols: 12 });
+const a = createDotNode_1.dot(App, { fontSize: 13 });
+createDotNode_1.dot("textarea", { cols: 12 });
 //# sourceMappingURL=test.js.map

@@ -1,5 +1,5 @@
 {
-  "name": "hmmsx",
+  "name": "dotjsx",
   "description": "Experimental DOM JSX library",
   "license": "MIT",
   "version": "0.0.1",
@@ -13,6 +13,7 @@
   "devDependencies": {
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
+    "typestyle": "^2.0.4",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.9.0"
   },

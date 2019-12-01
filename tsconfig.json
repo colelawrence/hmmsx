@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "docs",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
@@ -9,24 +9,24 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "jsx": "react",
-    "jsxFactory": "createHmmNode",
+    "jsxFactory": "d",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "stripInternal": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "types": ["rxjs", "behavior-state"]
+    "strict": true
   },
   "typeAcquisition": {
     "enable": false,
     "exclude": ["react"]
   },
+  "include": [
+    "src/state/*.ts",
+    "src/*.ts",
+    "src/*.d.ts",
+  ],
   "files": [
-    "src/jsx.d.ts",
-    "test/todo-state.ts",
-    "src/createHmmNode.ts",
-    "src/index.ts",
+    "test/TodoState.ts",
     "test/test.tsx"
   ]
 }
